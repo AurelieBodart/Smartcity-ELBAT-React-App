@@ -6,8 +6,10 @@ import {
 	Paper,
 	Typography
 } from "@material-ui/core";
+import { Redirect } from "react-router-dom";
 import LoginIcon from "@material-ui/icons/AccountCircle"
 import { login } from "../API";
+import {connect} from "react-redux";
 
 class LoginForm extends React.Component {
 	constructor(props) {
@@ -20,7 +22,7 @@ class LoginForm extends React.Component {
 			loading: false,
 			error: false,
 			errorMessage: "",
-			redirect: false
+			connected: false
 		};
 	}
 
@@ -39,13 +41,16 @@ class LoginForm extends React.Component {
 		try {
 			const data = await login(this.state.username, this.state.password);
 
-			console.log(data);
+			if (data.accessLevels.length === 1)
+				throw new Error("Un utilisateur normal ne peut se connecter !");
+			this.props.login(data);
 		} catch (e) {
 			this.setState({
 				error: true,
 				loading: false,
 				loaded: true,
-				errorMessage: e.message === "Request failed with status code 401" ? "Utilisateur inconnu" : e.message
+				errorMessage: e.message === "Request failed with status code 401" ? "Utilisateur inconnu" :
+					e.message === "Network Error" ? "Erreur de connexion" : e.message
 			});
 		}
 	}
@@ -63,6 +68,9 @@ class LoginForm extends React.Component {
 	}
 
 	render() {
+		if (this.state.connected === true)
+			return <Redirect to="/" />
+
 		let Content;
 
 		if (this.state.loaded === false)
@@ -70,12 +78,12 @@ class LoginForm extends React.Component {
 		else if (this.state.loading === true)
 			Content =
 				<Grid item>
-					<Typography component="h6">Chargement en cours...</Typography>
+					<Typography component="h6" color="error">Chargement en cours...</Typography>
 				</Grid>;
 		else if (this.state.error)
 			Content =
 				<Grid item>
-					<Typography component="h6">{this.state.errorMessage}</Typography>
+					<Typography component="h6" color="error">{this.state.errorMessage}</Typography>
 				</Grid>;
 
 		return (
@@ -109,9 +117,7 @@ class LoginForm extends React.Component {
 											variant="outlined"
 											value={this.state.username}
 											onChange={(event) =>
-												this.setState({
-													[event.target.name]: event.target.value,
-												})
+												this.handleUserChange(event)
 											}
 											required
 											autoFocus
@@ -126,9 +132,7 @@ class LoginForm extends React.Component {
 											variant="outlined"
 											value={this.state.password}
 											onChange={(event) =>
-												this.setState({
-													[event.target.name]: event.target.value,
-												})
+												this.handlePassChange(event)
 											}
 											required
 										/>
@@ -159,4 +163,19 @@ class LoginForm extends React.Component {
 	}
 }
 
-export default LoginForm;
+const mapStateToProps = (state) => {
+	return {
+		user: state.login
+	}
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		login: (user) => {
+			console.log(user);
+			dispatch({type: "login", payload:{ userData: user }});
+		}
+	}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
