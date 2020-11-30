@@ -43,7 +43,10 @@ class LoginForm extends React.Component {
 
 			if (data.accessLevels.length === 1)
 				throw new Error("Un utilisateur normal ne peut se connecter !");
+
 			this.props.login(data);
+			this.setState({connected : true});
+
 		} catch (e) {
 			this.setState({
 				error: true,

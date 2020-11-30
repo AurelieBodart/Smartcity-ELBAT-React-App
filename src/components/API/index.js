@@ -7,10 +7,24 @@ const login = async (username, password) => {
 }
 
 const getEstablishment = async (establishmentId) => {
-	return await api.getEstablishment(establishmentId);
+	if(establishmentId !== undefined)
+		return await api.getEstablishment(establishmentId);
+	else throw new Error("L'identifiant de l'établissement est manquant !");
+}
+
+const getAllEstablishment = async () => {
+	return await api.getAllEstablishments();
+
+}
+
+const postEstablishment = async (establishment) => {
+	if(establishment !== undefined)
+		return await api.addEstablishment(establishment);
+	else throw new Error("L'établissement est manquant à la requête");
 }
 
 export {
 	login,
-	getEstablishment
+	getEstablishment,
+	postEstablishment
 }

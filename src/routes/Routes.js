@@ -17,9 +17,7 @@ export default function Routes() {
 			<Router>
 				<TopBar />
 				<Switch>
-					<Route path="/addEstablishment" >
-						<AddEstablishment/>
-					</Route>
+					<Route path="/addEstablishment" component={AddEstablishment}/>
 					<Route path="/addWaiter"  component={AddWaiter} />
 					<Route path="/login"  component={LoginForm} />
 					<Route path="/" exact component={EstablishmentsList}/>

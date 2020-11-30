@@ -30,8 +30,7 @@ class TopBar extends React.Component {
 			this.defineRole();
 
 		if(this.state.role === "waiter" && this.state.establishmentName === undefined)
-			this.findEstablishmentName().then(r => "");
-
+			this.findEstablishmentName();
 	}
 
 	defineRole() {
@@ -43,10 +42,11 @@ class TopBar extends React.Component {
 		}
 	}
 
-	async findEstablishmentName() {
+	findEstablishmentName() {
 		try {
-			let response = await getEstablishment(this.state.establishmentId);
-			this.setState({establishmentName: response.data.name});
+			getEstablishment(this.state.establishmentId).then(response => {
+				this.setState({establishmentName: response.data.name});
+			});
 		} catch (e) {
 			console.log(e.message);
 		}
