@@ -6,7 +6,7 @@ import {
 	Paper,
 	Typography
 } from "@material-ui/core";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import LoginIcon from "@material-ui/icons/AccountCircle"
 import { login } from "../API";
 import {connect} from "react-redux";

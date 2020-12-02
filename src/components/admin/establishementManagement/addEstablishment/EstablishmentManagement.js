@@ -20,17 +20,15 @@ class EstablishmentManagement extends Component {
         }
     }
 
-    // componentDidUpdate(nextProps, nextState, nextContext) {
-    //     this.state.callback(this.state);
-    //     console.log("componentDidUpdate");
-    //     console.log(this.state.establishment);
-    // }
+    sendInformations(){
+        this.setState({isSend : true}, () =>
+            this.state.callback(this.state))
+    }
 
     render() {
         return (
             <div>
-                <Typography variant={"h3"} color={"secondary"}>Informations sur l'établissement</Typography>
-
+                <Typography variant={"h4"} color={"secondary"}>Informations sur l'établissement</Typography>
                     <Grid container
                         direction={"column"}
                         justify={"center"}
@@ -111,7 +109,9 @@ class EstablishmentManagement extends Component {
                                     required
                                 />
                             </Grid>
-                            <Typography variant={"h6"}>Adresse</Typography>
+
+                            <Typography variant={"h5"}>Adresse</Typography>
+
                             <Grid>
                                 <Typography>Rue : </Typography>
                                 <TextField
@@ -185,9 +185,9 @@ class EstablishmentManagement extends Component {
                             <Button
                                 color="primary"
                                 variant="contained"
-                                onClick={(event) => {this.state.callback(this.state)}}
+                                onClick={event => {this.sendInformations()}}
                             >
-                                OK
+                                Confirmer les informations de l'établissement
                             </Button>
                         </Paper>
                     </Grid>

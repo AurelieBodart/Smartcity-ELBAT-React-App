@@ -2,7 +2,8 @@ import React from 'react';
 import EstablishmentManagement from './EstablishmentManagement';
 import TableManagement from './TableManagement';
 import {Button} from "@material-ui/core";
-import { postEstablishment } from "../../API";
+import { postEstablishment } from "../../../API";
+import { postTable } from "../../../API";
 import {Link} from "react-router-dom";
 
 export default class AddEstablishment extends React.Component {
@@ -21,11 +22,12 @@ export default class AddEstablishment extends React.Component {
                 city : "",
                 postalCode : ""
 
-            }
+            },
+            tables : []
         }
     }
 
-    loadEstablishement(establishment){
+    loadEstablishment(establishment){
         this.setState({
             establishment : {
                 name : establishment.name,
@@ -42,24 +44,32 @@ export default class AddEstablishment extends React.Component {
         });
     }
 
+    loadTables(tables){
+        this.setState({tables : tables});
+    }
+
     async addEstablishment() {
         try {
-            const response = await postEstablishment(this.state.establishment);
-            console.log("réponse dans le bouton ajout restau");
-            console.log(response)
+            const idEstablishment = await postEstablishment(this.state.establishment);
+            console.log("id estab");
+            console.log(idEstablishment);
 
+            for(let table of this.state.tables){
+                console.log("table à ajouter");
+                console.log(table);
+                await postTable(table, idEstablishment);
+            }
         } catch (e) {
             console.log(e.message);
         }
-
     }
 
     render() {
         return (
             <div>
                 <div className={"cadre"}>
-                    <EstablishmentManagement callback={(establishment) => this.loadEstablishement(establishment)}/>
-                    <TableManagement/>
+                    <EstablishmentManagement callback={(establishment) => this.loadEstablishment(establishment)}/>
+                    <TableManagement callback={(tables) => this.loadTables(tables)}/>
                 </div>
 
                 <Button

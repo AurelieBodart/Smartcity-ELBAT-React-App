@@ -1,15 +1,18 @@
 import React, {Component} from "react";
-import {getAllEstablishments} from "../API/http";
+import {getAllEstablishments} from "../API";
 import {Button, Typography} from "@material-ui/core";
+import {Link} from "react-router-dom";
+import {connect} from "react-redux";
 
 class EstablishmentsList extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             establishments : []
         }
     }
 
+    // TODO changer pour comparer au prevState
     componentDidMount() {
         try {
             getAllEstablishments(this.state.establishments).then(result => {
@@ -23,6 +26,10 @@ class EstablishmentsList extends Component {
         }
     }
 
+    addEstablishementToStore(item){
+        return () => this.props.establishmentToEdit(item);
+    }
+
     render() {
         return (
             <div>
@@ -32,6 +39,8 @@ class EstablishmentsList extends Component {
                         return <Button
                             variant="contained"
                             color="secondary"
+                            component={Link} to={"/editEstablishment"}
+                            onClick={this.addEstablishementToStore(item)}
                         >
                             <Typography color={"primary"}>{item.name}</Typography>
                         </Button>
@@ -42,4 +51,12 @@ class EstablishmentsList extends Component {
     }
 }
 
-export default EstablishmentsList;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        establishmentToEdit : (establishment) => {
+            dispatch({type : "establishmentToEdit", payload : {establishmentInfo : establishment}});
+        }
+    }
+}
+
+export default connect(undefined,mapDispatchToProps)(EstablishmentsList);

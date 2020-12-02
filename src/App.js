@@ -4,7 +4,6 @@ import React from "react";
 import { createMuiTheme, MuiThemeProvider, CssBaseline } from "@material-ui/core";
 import { Helmet } from "react-helmet";
 import Routes from "./routes/Routes";
-import TopBar from "./components/TopBar";
 
 const theme = createMuiTheme({
 	palette: {
@@ -23,7 +22,10 @@ const theme = createMuiTheme({
 		background: {
 			default: "#373737",
 			paper: "#bdbdbd"
-		}
+		},
+		error : {
+			main : "#ab0b1b"
+		},
 	}
 });
 

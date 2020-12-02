@@ -1,6 +1,6 @@
 import React from "react";
-import {AppBar, Button, Grid, Toolbar, Typography} from "@material-ui/core";
-import {AccountCircle, PersonAdd} from "@material-ui/icons";
+import {AppBar, Grid, Toolbar, Typography} from "@material-ui/core";
+import {AccountCircle} from "@material-ui/icons";
 import { connect } from "react-redux";
 import { getEstablishment } from "../API";
 import logo from '../../Logo_Gray.png';

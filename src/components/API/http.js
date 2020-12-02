@@ -48,7 +48,26 @@ const addEstablishment = async (establishment) => {
 		postalCode : establishment.postalCode
 
 	},{headers: header});
-	console.log(response.data);
+	return response.data;
 }
 
-export { login, getEstablishment, getAllEstablishments, addEstablishment }
+const addTable = async (table, idEstablishement) => {
+	return await axios.post(`${API_URL}/table`, {
+		idEstablishment : idEstablishement,
+		nbSeats : table.nbSeats,
+		isOutside : table.isOutside
+	},{headers: header});
+}
+
+const deleteEstablishment = async (idEstablishment) => {
+	const response = await axios.delete(`${API_URL}/establishment`, {
+		headers : header,
+		data : {
+			establishmentId : idEstablishment
+		}
+	});
+
+	return response.data;
+}
+
+export { login, getEstablishment, getAllEstablishments, addEstablishment, addTable, deleteEstablishment }
