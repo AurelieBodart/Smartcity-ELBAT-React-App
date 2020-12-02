@@ -2,8 +2,8 @@ import React from 'react';
 import EstablishmentManagement from './EstablishmentManagement';
 import TableManagement from './TableManagement';
 import {Button} from "@material-ui/core";
-import { postEstablishment } from "../../../API";
-import { postTable } from "../../../API";
+import { postEstablishment } from "../../API";
+import { postTable } from "../../API";
 import {Link} from "react-router-dom";
 
 export default class AddEstablishment extends React.Component {
@@ -75,7 +75,7 @@ export default class AddEstablishment extends React.Component {
                 <Button
                     variant="contained"
                     color="secondary"
-                    onClick={event => this.addEstablishment()}
+                    onClick={() => this.addEstablishment()}
                     component={Link} to={"/"}
                 >Confirmer l'ajout du restaurant</Button>
             </div>

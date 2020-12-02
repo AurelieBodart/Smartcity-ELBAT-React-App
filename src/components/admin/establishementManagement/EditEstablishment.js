@@ -16,12 +16,14 @@ class EditEstablishment extends Component {
     async deleteChosenEstablishment() {
         this.setState({error : ""});
 
-        // demande confirmation
+        let confirmation = window.confirm("Souhaitez-vous supprimer ce restaurant ?");
 
-        try {
-            const response = await deleteEstablishment(this.state.establishment.id);
-        } catch (e) {
-            this.setState({error : e.message});
+        if(confirmation){
+            try {
+                await deleteEstablishment(this.state.establishment.id);
+            } catch (e) {
+                this.setState({error : e.message});
+            }
         }
     }
 
@@ -36,7 +38,7 @@ class EditEstablishment extends Component {
                 elevation={2}
             >
                 <div style={{ height: 500, width: '100%' }} >
-                    <Typography variant={"h4"} color={"secondary"}>{this.state.establishment.name}</Typography>
+                    <Typography variant={"h4"} color={"primary"}>{this.state.establishment.name}</Typography>
 
                     <Button color="primary"
                             variant="contained"
@@ -46,7 +48,7 @@ class EditEstablishment extends Component {
 
                     <Button color="primary"
                             variant="contained"
-                            onClick={event => this.deleteChosenEstablishment()}
+                            onClick={() => this.deleteChosenEstablishment()}
                             component={Link} to={"/"}
                     >
                         Supprimer l'établissement

@@ -5,7 +5,7 @@ import {
 	Route,
 } from "react-router-dom";
 import LoginForm from "../components/LoginScreen";
-import AddEstablishment from '../components/admin/establishementManagement/addEstablishment/AddEstablishment';
+import AddEstablishment from '../components/admin/establishementManagement/AddEstablishment';
 import AddWaiter from '../components/admin/waiterManagement/AddWaiter';
 import EstablishmentsList from "../components/admin/EstablishmentsList";
 import TopBar from "../components/TopBar";
