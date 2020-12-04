@@ -10,6 +10,7 @@ import AddWaiter from '../components/admin/waiterManagement/AddWaiter';
 import EstablishmentsList from "../components/admin/EstablishmentsList";
 import TopBar from "../components/TopBar";
 import EditEstablishment from "../components/admin/establishementManagement/EditEstablishment";
+import UpdateEstablishment from "../components/admin/establishementManagement/UpdateEstablishment";
 
 export default function Routes() {
 	return (
@@ -18,6 +19,7 @@ export default function Routes() {
 				<TopBar />
 				<Switch>
 					<Route path="/addEstablishment" component={AddEstablishment} />
+					<Route path="/updateEstablishment" component={UpdateEstablishment}/>
 					<Route path="/addWaiter"  component={AddWaiter} />
 					<Route path="/editEstablishment" component={EditEstablishment}/>
 					<Route path="/login"  component={LoginForm} />

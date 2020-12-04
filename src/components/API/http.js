@@ -22,16 +22,14 @@ const getEstablishment = async (establishmentId) => {
 	const response = await axios.get(`${API_URL}/establishment/${establishmentId}`, {
 		headers: header
 	});
-	return response;
+	return response.data;
 }
 
 const getAllEstablishments = async () => {
 	const response = await axios.get(API_URL + "/establishment/", {
 		headers: header
 	})
-	console.log("http listes restau");
-	console.log(response);
-	return response;
+	return response.data;
 }
 
 const addEstablishment = async (establishment) => {
@@ -41,6 +39,25 @@ const addEstablishment = async (establishment) => {
 		VATNumber : establishment.VATNumber,
 		email : establishment.email,
 		category : establishment.category,
+		street : establishment.street,
+		number : establishment.number,
+		country : establishment.country,
+		city : establishment.city,
+		postalCode : establishment.postalCode
+
+	},{headers: header});
+	return response.data;
+}
+
+const updateEstablishment = async (establishment) => {
+	const response = await axios.patch(`${API_URL}/establishment`, {
+		id : establishment.id,
+		name : establishment.name,
+		phoneNumber : establishment.phoneNumber,
+		VATNumber : establishment.VATNumber,
+		email : establishment.email,
+		category : establishment.category,
+		addressId : establishment.addressId,
 		street : establishment.street,
 		number : establishment.number,
 		country : establishment.country,
@@ -70,4 +87,32 @@ const deleteEstablishment = async (idEstablishment) => {
 	return response.data;
 }
 
-export { login, getEstablishment, getAllEstablishments, addEstablishment, addTable, deleteEstablishment }
+const deleteTable = async (idTable, idEstablishment) => {
+	const response = await axios.delete(`${API_URL}/table`, {
+		headers : header,
+		data : {
+			idTable : idTable,
+			idEstablishment : idEstablishment
+		}
+	});
+	return response.data;
+}
+
+const getAllTables = async (idEstablishment) => {
+	const response = await axios.get(`${API_URL}/table/${idEstablishment}`, {
+		headers: header
+	});
+	return response.data;
+}
+
+export {
+	login,
+	getEstablishment,
+	getAllEstablishments,
+	addEstablishment,
+	addTable,
+	deleteEstablishment,
+	getAllTables,
+	deleteTable,
+	updateEstablishment
+}

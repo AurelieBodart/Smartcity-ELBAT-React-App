@@ -28,9 +28,6 @@ class EditEstablishment extends Component {
     }
 
     render() {
-        console.log("render");
-        console.log(this.state);
-
         return (
             <Paper
                 className="table-form"
@@ -42,6 +39,7 @@ class EditEstablishment extends Component {
 
                     <Button color="primary"
                             variant="contained"
+                            component={Link} to={"/updateEstablishment"}
                     >
                         Modifier l'établissement
                     </Button>

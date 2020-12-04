@@ -23,15 +23,34 @@ const postEstablishment = async (establishment) => {
 	else throw new Error("L'établissement est manquant à la requête");
 }
 
+const patchEstablishment = async (establishment) => {
+	if(establishment !== undefined)
+		return await api.updateEstablishment(establishment);
+	else throw new Error("L'établissement est manquant à la requête");
+}
+
 const postTable = async (table, idEstablishment) => {
 	if(table !== undefined && idEstablishment !== undefined)
 		return await api.addTable(table, idEstablishment);
-	else throw new Error("La table et l'identifiant sont obligatoires !");
+	else throw new Error("La table et l'identifiant de l'établissement sont obligatoires !");
 }
 
 const deleteEstablishment = async (idEstablishment) => {
 	if(idEstablishment !== undefined)
 		return await api.deleteEstablishment(idEstablishment);
+	else throw new Error("L'identifiant est obligatoire !");
+}
+
+const deleteTable = async (idTable, idEstablishment) => {
+	if(idTable !== undefined && idEstablishment !== undefined)
+		return api.deleteTable(idTable, idEstablishment);
+	else throw new Error("Les identifiants de la table et de l'établissement sont obligatoires !");
+
+}
+
+const getAllTables = async (idEstablishment) => {
+	if(idEstablishment !== undefined)
+		return await api.getAllTables(idEstablishment);
 	else throw new Error("L'identifiant est obligatoire !");
 }
 
@@ -41,5 +60,8 @@ export {
 	getAllEstablishments,
 	postEstablishment,
 	postTable,
-	deleteEstablishment
+	deleteEstablishment,
+	getAllTables,
+	deleteTable,
+	patchEstablishment
 }

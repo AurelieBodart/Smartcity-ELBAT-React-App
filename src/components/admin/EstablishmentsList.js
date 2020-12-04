@@ -8,22 +8,32 @@ class EstablishmentsList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            establishments : []
+            establishments : [],
+            loadEstablishment : true
         }
     }
 
-    // TODO changer pour comparer au prevState
-    componentDidMount() {
-        try {
-            getAllEstablishments(this.state.establishments).then(result => {
-                console.log("result getAllEstablishment");
-                console.log(result);
+    // TODO je ne sais pas pourquoi mais il faut didMount et didUpdate sinon la liste ne s'actualise pas ...
 
-                this.setState({establishments : result.data});
-            })
-        } catch (e) {
-            console.log(e.message);
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.state.loadEstablishment){
+            getAllEstablishments()
+                .then(result => {
+                    if(prevState.establishment !== result)
+                        this.setState({establishments : result});
+                })
+                .catch(e => console.log(e.message));
+
+            this.setState({loadEstablishment : false})
         }
+    }
+
+    componentDidMount() {
+        getAllEstablishments()
+            .then(result => {
+                this.setState({establishments : result});
+            })
+            .catch(e => console.log(e.message));
     }
 
     addEstablishementToStore(item){
@@ -45,7 +55,6 @@ class EstablishmentsList extends Component {
                             <Typography color={"primary"}>{item.name}</Typography>
                         </Button>
                     })}
-
             </div>
         );
     }

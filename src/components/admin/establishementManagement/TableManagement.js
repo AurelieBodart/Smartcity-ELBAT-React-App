@@ -12,9 +12,19 @@ class TableManagement extends Component {
             inputNbSeats : "",
             inputIsOutside : false,
             error : "",
+            sentMessage : "",
             callback : props.callback
         }
     };
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.tablesToUpdate !== undefined && this.state.tables.length === 0) {
+            this.setState({
+                tables : [...this.props.tablesToUpdate],
+                id : this.props?.tablesToUpdate[this.props?.tablesToUpdate?.length - 1]?.id + 1
+            });
+        }
+    }
 
     addTable() {
         if (this.state.inputNbTables === "" || this.state.inputNbTables === "0") {
@@ -56,12 +66,17 @@ class TableManagement extends Component {
         this.setState({tables : newTables});
     }
 
+    sentTables() {
+        this.setState({sentMessage : "Les tables de l'établissement sont enregistrées"}, () => {
+            this.state.callback(this.state.tables)
+        })
+    }
+
     render() {
         const columns = [
             { field: 'nbSeats', headerName: 'Nombre de places', width: 200 },
             { field: 'isOutside', headerName: 'En extérieur', width: 150 }
         ];
-        console.log("render table");
 
         return (
             <div>
@@ -84,8 +99,6 @@ class TableManagement extends Component {
                     </div>
                     <Typography variant={"h5"} color={"primary"}>Cochez une table pour la supprimer</Typography>
                 </Paper>
-
-
 
                 <Typography variant={"h5"} color={"secondary"}>Ajouter des tables</Typography>
                 <Paper
@@ -127,14 +140,15 @@ class TableManagement extends Component {
                     <Button
                         color="secondary"
                         variant="contained"
-                        onClick={(event) => this.addTable()}>Ajouter la table</Button>
+                        onClick={() => this.addTable()}>Ajouter la table</Button>
                     <Grid>
                         <Typography color={"error"}>{this.state.error}</Typography>
+                        <Typography variant={"h6"} color={"secondary"}>{this.state.sentMessage}</Typography>
 
                         <Button
                             color="primary"
                             variant="contained"
-                            onClick={(event) => {this.state.callback(this.state.tables)}}
+                            onClick={() => {this.sentTables()}}
                         >
                             Confirmer l'ajout des tables
                         </Button>

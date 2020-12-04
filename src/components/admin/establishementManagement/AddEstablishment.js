@@ -1,28 +1,15 @@
 import React from 'react';
 import EstablishmentManagement from './EstablishmentManagement';
 import TableManagement from './TableManagement';
-import {Button} from "@material-ui/core";
-import { postEstablishment } from "../../API";
-import { postTable } from "../../API";
+import {Button, Typography} from "@material-ui/core";
+import { postEstablishment, postTable } from "../../API";
 import {Link} from "react-router-dom";
 
 export default class AddEstablishment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            establishment : {
-                name : "",
-                phoneNumber : "",
-                VATNumber : "",
-                email : "",
-                category : "",
-                street : "",
-                number : "",
-                country : "",
-                city : "",
-                postalCode : ""
-
-            },
+            establishment : {},
             tables : []
         }
     }
@@ -51,13 +38,10 @@ export default class AddEstablishment extends React.Component {
     async addEstablishment() {
         try {
             const idEstablishment = await postEstablishment(this.state.establishment);
-            console.log("id estab");
-            console.log(idEstablishment);
 
-            for(let table of this.state.tables){
-                console.log("table à ajouter");
-                console.log(table);
-                await postTable(table, idEstablishment);
+            if(idEstablishment !== undefined) { // TODO undefined ou null ?
+                for (let table of this.state.tables)
+                    await postTable(table, idEstablishment);
             }
         } catch (e) {
             console.log(e.message);
@@ -67,6 +51,8 @@ export default class AddEstablishment extends React.Component {
     render() {
         return (
             <div>
+                <Typography variant={"h1"} color={"secondary"}>Ajout d'un établissement</Typography>
+
                 <div className={"cadre"}>
                     <EstablishmentManagement callback={(establishment) => this.loadEstablishment(establishment)}/>
                     <TableManagement callback={(tables) => this.loadTables(tables)}/>
