@@ -5,12 +5,12 @@ import {
 	Route,
 } from "react-router-dom";
 import LoginForm from "../components/LoginScreen";
-import AddEstablishment from '../components/admin/establishementManagement/AddEstablishment';
+import AddEstablishment from '../components/admin/establishmentManagement/AddEstablishment';
 import AddWaiter from '../components/admin/waiterManagement/AddWaiter';
 import EstablishmentsList from "../components/admin/EstablishmentsList";
 import TopBar from "../components/TopBar";
-import EditEstablishment from "../components/admin/establishementManagement/EditEstablishment";
-import UpdateEstablishment from "../components/admin/establishementManagement/UpdateEstablishment";
+import EditEstablishment from "../components/admin/establishmentManagement/EditEstablishment";
+import UpdateEstablishment from "../components/admin/establishmentManagement/UpdateEstablishment";
 
 export default function Routes() {
 	return (

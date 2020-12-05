@@ -11,7 +11,7 @@ const userReducer = (state = {user : {}}, action) => {
     }
 }
 
-const establishmentReducer = (state = {establishement : {}}, action) => {
+const establishmentReducer = (state = {establishment : {}}, action) => {
     switch (action.type) {
         case "establishmentToEdit" :
             return {establishmentStore : action.payload.establishmentInfo};
@@ -20,6 +20,6 @@ const establishmentReducer = (state = {establishement : {}}, action) => {
     }
 }
 
-const store = createStore(combineReducers({ login: userReducer, establishementToEdit : establishmentReducer }));
+const store = createStore(combineReducers({ login: userReducer, establishmentToEdit : establishmentReducer }));
 
 export default store;

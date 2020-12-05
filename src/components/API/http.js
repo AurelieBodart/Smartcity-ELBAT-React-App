@@ -68,9 +68,9 @@ const updateEstablishment = async (establishment) => {
 	return response.data;
 }
 
-const addTable = async (table, idEstablishement) => {
+const addTable = async (table, idEstablishment) => {
 	return await axios.post(`${API_URL}/table`, {
-		idEstablishment : idEstablishement,
+		idEstablishment : idEstablishment,
 		nbSeats : table.nbSeats,
 		isOutside : table.isOutside
 	},{headers: header});

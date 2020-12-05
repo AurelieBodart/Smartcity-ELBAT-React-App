@@ -36,7 +36,7 @@ class EstablishmentsList extends Component {
             .catch(e => console.log(e.message));
     }
 
-    addEstablishementToStore(item){
+    addEstablishmentToStore(item){
         return () => this.props.establishmentToEdit(item);
     }
 
@@ -50,7 +50,7 @@ class EstablishmentsList extends Component {
                             variant="contained"
                             color="secondary"
                             component={Link} to={"/editEstablishment"}
-                            onClick={this.addEstablishementToStore(item)}
+                            onClick={this.addEstablishmentToStore(item)}
                         >
                             <Typography color={"primary"}>{item.name}</Typography>
                         </Button>
