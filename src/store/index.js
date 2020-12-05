@@ -1,28 +1,25 @@
 import { createStore, combineReducers } from "redux";
 
-const user = JSON.parse(localStorage.getItem("user"));
-const initialState = user ? { isLoggedIn: true, user } : { };
 
-export function userReducer(state = initialState, action) {
-	const { type, payload } = action;
 
-	switch (type) {
-		case "login":
-			const newUser = payload.userData;
-			return {
-				isLoggedIn: true,
-				user: newUser
-			};
-		case "logout":
-			return {
-				isLoggedIn: false,
-				user: ""
-			}
-		default:
-			return state;
-	}
+const userReducer = (state = {user : {}}, action) => {
+    switch (action.type) {
+        case "login" :
+            return {userStore : action.payload.userInfo};
+        default :
+            return state;
+    }
 }
 
-const store = createStore(combineReducers({ login: userReducer }));
+const establishmentReducer = (state = {establishement : {}}, action) => {
+    switch (action.type) {
+        case "establishmentToEdit" :
+            return {establishmentStore : action.payload.establishmentInfo};
+        default :
+            return state;
+    }
+}
+
+const store = createStore(combineReducers({ login: userReducer, establishementToEdit : establishmentReducer }));
 
 export default store;

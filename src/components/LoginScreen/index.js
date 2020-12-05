@@ -6,7 +6,7 @@ import {
 	Paper,
 	Typography
 } from "@material-ui/core";
-import { Redirect } from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import LoginIcon from "@material-ui/icons/AccountCircle"
 import { login } from "../API";
 import {connect} from "react-redux";
@@ -43,7 +43,10 @@ class LoginForm extends React.Component {
 
 			if (data.accessLevels.length === 1)
 				throw new Error("Un utilisateur normal ne peut se connecter !");
+
 			this.props.login(data);
+			this.setState({connected : true});
+
 		} catch (e) {
 			this.setState({
 				error: true,
@@ -163,19 +166,12 @@ class LoginForm extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-		user: state.login
-	}
-};
-
 const mapDispatchToProps = (dispatch) => {
 	return {
 		login: (user) => {
-			console.log(user);
-			dispatch({type: "login", payload:{ userData: user }});
+			dispatch({type: "login", payload:{ userInfo: user }});
 		}
 	}
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect(undefined, mapDispatchToProps)(LoginForm);

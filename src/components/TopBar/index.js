@@ -3,45 +3,77 @@ import {AppBar, Grid, Toolbar, Typography} from "@material-ui/core";
 import {AccountCircle} from "@material-ui/icons";
 import { connect } from "react-redux";
 import { getEstablishment } from "../API";
-import Async from "react-async";
-
-const getEstablishmentById = async ({id}) => {
-	return await getEstablishment(id);
-}
+import logo from '../../Logo_Gray.png';
+import AdminButtonsRouter from "../../routes/AdminButtonsRouter";
 
 class TopBar extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			user: props.user
+			user: undefined,
+			role : undefined,
+			establishmentId : undefined,
+			establishmentName : undefined
 		}
+	}
+
+	componentWillReceiveProps(nextProps, nextContext) {
+		if(nextProps.userStore !== undefined)
+			this.setState({ user : this.props.userStore });
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if(this.state.user === undefined)
+			this.setState({ user : this.props.userStore });
+		else if(this.state.role === undefined)
+			this.defineRole();
+
+		if(this.state.role === "waiter" && this.state.establishmentName === undefined)
+			this.findEstablishmentName();
 	}
 
 	defineRole() {
 		for (let accessLevel of this.state.user.accessLevels) {
 			if (accessLevel.accessLevel === "admin")
-				return "admin";
+				this.setState({role : "admin"});
 			else if (accessLevel.accessLevel.split("_")[0] === "waiter")
-				return  { role: "waiter", establishmentId: parseInt(accessLevel.establishmentId) };
+				this.setState({ role: "waiter", establishmentId: parseInt(accessLevel.establishmentId) });
+		}
+	}
+
+	findEstablishmentName() {
+		try {
+			getEstablishment(this.state.establishmentId).then(response => {
+				this.setState({establishmentName: response.data.name});
+			});
+		} catch (e) {
+			console.log(e.message);
 		}
 	}
 
 	render() {
 		let UserContent =
-			<Grid item style={{flex: "auto"}}>
-				<Typography variant="h6" align="left">ELBAT</Typography>
-			</Grid>;
+			<Grid container>
+				<Grid item style={{flex: "auto"}}>
+					<img src={logo} className="App-logo" alt="logo" />
+				</Grid>
+			</Grid>
 
 		if (this.state.user !== undefined) {
-			const role = this.defineRole();
 
-			if (role === "admin") {
+			if (this.state.role === "admin") {
+
 				UserContent =
 					<Grid container>
 						<Grid item style={{flex: "auto"}}>
-							<Typography variant="h6" align="left">Panel admin - ELBAT</Typography>
+							<img src={logo} className="App-logo" alt="logo" />
+
 						</Grid>
+						<Grid item style={{flex: "auto"}}>
+							<Typography variant="h6" align="left">Panel admin</Typography>
+						</Grid>
+						<AdminButtonsRouter/>
 						<Grid
 							item
 							alignitems="center"
@@ -59,23 +91,17 @@ class TopBar extends React.Component {
 							</Typography>
 						</Grid>
 					</Grid>
+
 			} else {
+
 				UserContent =
 					<Grid container>
 						<Grid item style={{flex: "auto"}}>
-							<Async promiseFn={getEstablishmentById} id={role.establishmentId}>
-								{
-									({response}) => {
-										console.log(response);
-										return (
-											<Typography
-												variant="h6"
-												align="left"
-											>{response.data.name}</Typography>
-										)
-									}
-								}
-							</Async>
+							<img src={logo} className="App-logo" alt="logo" />
+							<Typography
+								variant="h6"
+								align="left"
+							>{this.state.establishmentName}</Typography>
 						</Grid>
 						<Grid
 							item
@@ -98,7 +124,7 @@ class TopBar extends React.Component {
 		}
 
 		return (
-			<AppBar position="fixed" alignitems="center" color="primary">
+			<AppBar position="sticky" alignitems="center" color="primary">
 				<Toolbar>
 					{UserContent && UserContent}
 				</Toolbar>
@@ -109,8 +135,8 @@ class TopBar extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		user : state.user
+		userStore : state.login.userStore
 	}
 };
 
-export default connect(mapStateToProps)(TopBar);
+export default connect(mapStateToProps, undefined)(TopBar);
