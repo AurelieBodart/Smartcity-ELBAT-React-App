@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Button, Paper, Typography} from "@material-ui/core";
+import {Button, ButtonGroup, Paper, Typography} from "@material-ui/core";
 import { connect } from "react-redux";
 import { deleteEstablishment } from "../../API";
 import {Link} from "react-router-dom";
@@ -34,9 +34,8 @@ class EditEstablishment extends Component {
                 variant="elevation"
                 elevation={2}
             >
-                <div style={{ height: 500, width: '100%' }} >
-                    <Typography variant={"h4"} color={"primary"}>{this.state.establishment.name}</Typography>
-
+                <Typography variant={"h4"} color={"primary"}>{this.state.establishment.name}</Typography>
+                <ButtonGroup orientation={"vertical"} style={{marginBottom: "20px"}}>
                     <Button color="primary"
                             variant="contained"
                             component={Link} to={"/updateEstablishment"}
@@ -55,11 +54,12 @@ class EditEstablishment extends Component {
 
                     <Button color="primary"
                             variant="contained"
+                            component={Link} to={"/editEmployees"}
                     >
                         Gérer les employés
                     </Button>
-                    <Typography color={"error"}>{this.state.error}</Typography>
-                </div>
+                </ButtonGroup>
+                <Typography color={"error"}>{this.state.error}</Typography>
             </Paper>
         );
     }

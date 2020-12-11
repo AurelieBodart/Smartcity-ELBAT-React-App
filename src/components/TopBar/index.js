@@ -1,7 +1,8 @@
 import React from "react";
-import {AppBar, Grid, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Button, Grid, Toolbar, Typography} from "@material-ui/core";
 import {AccountCircle} from "@material-ui/icons";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { getEstablishment } from "../API";
 import logo from '../../Logo_Gray.png';
 import AdminButtonsRouter from "../../routes/AdminButtonsRouter";
@@ -16,11 +17,6 @@ class TopBar extends React.Component {
 			establishmentId : undefined,
 			establishmentName : undefined
 		}
-	}
-
-	componentWillReceiveProps(nextProps, nextContext) {
-		if(nextProps.userStore !== undefined)
-			this.setState({ user : this.props.userStore });
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -45,7 +41,7 @@ class TopBar extends React.Component {
 	findEstablishmentName() {
 		try {
 			getEstablishment(this.state.establishmentId).then(response => {
-				this.setState({establishmentName: response.data.name});
+				this.setState({establishmentName: response.name});
 			});
 		} catch (e) {
 			console.log(e.message);
@@ -63,20 +59,21 @@ class TopBar extends React.Component {
 		if (this.state.user !== undefined) {
 
 			if (this.state.role === "admin") {
-
 				UserContent =
-					<Grid container>
-						<Grid item style={{flex: "auto"}}>
-							<img src={logo} className="App-logo" alt="logo" />
-
+					<Grid container direction="row" alignItems="center">
+						<Grid item>
+							<Button component={Link} to={"/"}>
+								<img src={logo} className="App-logo" alt="logo" />
+							</Button>
+							<Typography variant="h6" align="left" style={{display: "inline"}}>Panel admin</Typography>
 						</Grid>
-						<Grid item style={{flex: "auto"}}>
-							<Typography variant="h6" align="left">Panel admin</Typography>
+						<Grid item style={{flex: "auto"}}/>
+						<Grid item>
+							<AdminButtonsRouter />
 						</Grid>
-						<AdminButtonsRouter/>
 						<Grid
 							item
-							alignitems="center"
+							style={{marginLeft: "20px"}}
 						>
 							<AccountCircle
 								style={{
@@ -91,21 +88,19 @@ class TopBar extends React.Component {
 							</Typography>
 						</Grid>
 					</Grid>
-
 			} else {
-
 				UserContent =
-					<Grid container>
-						<Grid item style={{flex: "auto"}}>
-							<img src={logo} className="App-logo" alt="logo" />
-							<Typography
-								variant="h6"
-								align="left"
-							>{this.state.establishmentName}</Typography>
+					<Grid container direction="row" alignItems="center">
+						<Grid item>
+							<Button component={Link} to={"/"}>
+								<img src={logo} className="App-logo" alt="logo" />
+							</Button>
+							<Typography variant="h6" align="left" style={{display: "inline"}}>{this.state.establishmentName}</Typography>
 						</Grid>
+						<Grid style={{flex: "auto"}}/>
 						<Grid
 							item
-							alignitems="center"
+							style={{marginLeft: "20px"}}
 						>
 							<AccountCircle
 								style={{

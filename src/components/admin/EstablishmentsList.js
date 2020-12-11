@@ -51,8 +51,10 @@ class EstablishmentsList extends Component {
                             color="secondary"
                             component={Link} to={"/editEstablishment"}
                             onClick={this.addEstablishmentToStore(item)}
+                            key={item.name}
+                            style={{margin: "10px", width: "250px", height: "60px"}}
                         >
-                            <Typography color={"primary"}>{item.name}</Typography>
+                            {item.name}
                         </Button>
                     })}
             </div>
@@ -63,7 +65,7 @@ class EstablishmentsList extends Component {
 const mapDispatchToProps = (dispatch) => {
     return {
         establishmentToEdit : (establishment) => {
-            dispatch({type : "establishmentToEdit", payload : {establishmentInfo : establishment}});
+            dispatch({type : "establishment", payload : {establishmentInfo : establishment}});
         }
     }
 }
