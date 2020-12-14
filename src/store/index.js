@@ -1,7 +1,5 @@
 import { createStore, combineReducers } from "redux";
 
-
-
 const userReducer = (state = {user : {}}, action) => {
     switch (action.type) {
         case "login" :
@@ -11,15 +9,15 @@ const userReducer = (state = {user : {}}, action) => {
     }
 }
 
-const establishmentReducer = (state = {establishement : {}}, action) => {
+const establishmentReducer = (state = {establishment : {}}, action) => {
     switch (action.type) {
-        case "establishmentToEdit" :
+        case "establishment" :
             return {establishmentStore : action.payload.establishmentInfo};
         default :
             return state;
     }
 }
 
-const store = createStore(combineReducers({ login: userReducer, establishementToEdit : establishmentReducer }));
+const store = createStore(combineReducers({ login: userReducer, establishmentChosen : establishmentReducer }));
 
 export default store;

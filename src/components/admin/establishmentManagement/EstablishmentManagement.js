@@ -15,15 +15,15 @@ class EstablishmentManagement extends Component {
             country : props.establishmentToUpdate?.country,
             city : props.establishmentToUpdate?.city,
             postalCode : props.establishmentToUpdate?.postalCode,
-            isSend : false,
+            isSent : false,
             sentMessage : "",
             callback : props.callback
         }
     }
 
-    sentInformations(){
-        this.setState({isSend : true}, () => {
-            if(this.state.isSend && this.allDefined(
+    sendInformation(){
+        this.setState({isSent : true}, () => {
+            if(this.state.isSent && this.allDefined(
                     this.state.name,
                     this.state.phoneNumber,
                     this.state.VATNumber,
@@ -70,8 +70,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({name : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.name === undefined || this.state.name === "")}
-                                    helperText={this.state.isSend && (this.state.name === undefined || this.state.name === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.name === undefined || this.state.name === "")}
+                                    helperText={this.state.isSent && (this.state.name === undefined || this.state.name === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -85,8 +85,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({phoneNumber : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.phoneNumber === undefined || this.state.phoneNumber === "")}
-                                    helperText={this.state.isSend && (this.state.phoneNumber === undefined || this.state.phoneNumber === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.phoneNumber === undefined || this.state.phoneNumber === "")}
+                                    helperText={this.state.isSent && (this.state.phoneNumber === undefined || this.state.phoneNumber === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -100,8 +100,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({VATNumber : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.VATNumber === undefined || this.state.VATNumber === "")}
-                                    helperText={this.state.isSend && (this.state.VATNumber === undefined || this.state.VATNumber === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.VATNumber === undefined || this.state.VATNumber === "")}
+                                    helperText={this.state.isSent && (this.state.VATNumber === undefined || this.state.VATNumber === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -115,8 +115,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({email : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.email === undefined || this.state.email === "")}
-                                    helperText={this.state.isSend && (this.state.email === undefined || this.state.email === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.email === undefined || this.state.email === "")}
+                                    helperText={this.state.isSent && (this.state.email === undefined || this.state.email === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -130,8 +130,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({category : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.category === undefined || this.state.category === "")}
-                                    helperText={this.state.isSend && (this.state.category === undefined || this.state.category === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.category === undefined || this.state.category === "")}
+                                    helperText={this.state.isSent && (this.state.category === undefined || this.state.category === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -148,8 +148,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({street : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.street === undefined || this.state.street === "")}
-                                    helperText={this.state.isSend && (this.state.street === undefined || this.state.street === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.street === undefined || this.state.street === "")}
+                                    helperText={this.state.isSent && (this.state.street === undefined || this.state.street === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -163,8 +163,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({number : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.number === undefined || this.state.number === "")}
-                                    helperText={this.state.isSend && (this.state.number === undefined || this.state.number === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.number === undefined || this.state.number === "")}
+                                    helperText={this.state.isSent && (this.state.number === undefined || this.state.number === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -178,8 +178,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({city : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.city === undefined || this.state.city === "")}
-                                    helperText={this.state.isSend && (this.state.city === undefined || this.state.city === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.city === undefined || this.state.city === "")}
+                                    helperText={this.state.isSent && (this.state.city === undefined || this.state.city === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -193,8 +193,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({postalCode : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.postalCode === undefined || this.state.postalCode === "")}
-                                    helperText={this.state.isSend && (this.state.postalCode === undefined || this.state.postalCode === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.postalCode === undefined || this.state.postalCode === "")}
+                                    helperText={this.state.isSent && (this.state.postalCode === undefined || this.state.postalCode === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -208,8 +208,8 @@ class EstablishmentManagement extends Component {
                                     onChange={(event) =>
                                         this.setState({country : event.target.value})
                                     }
-                                    error={this.state.isSend && (this.state.country === undefined || this.state.country === "")}
-                                    helperText={this.state.isSend && (this.state.country === undefined || this.state.country === "") ? 'Empty field !' : ''}
+                                    error={this.state.isSent && (this.state.country === undefined || this.state.country === "")}
+                                    helperText={this.state.isSent && (this.state.country === undefined || this.state.country === "") ? 'Empty field !' : ''}
                                     required
                                 />
                             </Grid>
@@ -219,7 +219,7 @@ class EstablishmentManagement extends Component {
                             <Button
                                 color="primary"
                                 variant="contained"
-                                onClick={() => {this.sentInformations()}}
+                                onClick={() => {this.sendInformation()}}
                             >
                                 Confirmer les informations de l'établissement
                             </Button>

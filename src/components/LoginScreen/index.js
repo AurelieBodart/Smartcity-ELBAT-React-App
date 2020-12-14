@@ -42,7 +42,7 @@ class LoginForm extends React.Component {
 			const data = await login(this.state.username, this.state.password);
 
 			if (data.accessLevels.length === 1)
-				throw new Error("Un utilisateur normal ne peut se connecter !");
+				throw new Error("Un client ne peut se connecter à cette partie de l'application !");
 
 			this.props.login(data);
 			this.setState({connected : true});
@@ -52,8 +52,7 @@ class LoginForm extends React.Component {
 				error: true,
 				loading: false,
 				loaded: true,
-				errorMessage: e.message === "Request failed with status code 401" ? "Utilisateur inconnu" :
-					e.message === "Network Error" ? "Erreur de connexion" : e.message
+				errorMessage: e.message
 			});
 		}
 	}
@@ -114,9 +113,8 @@ class LoginForm extends React.Component {
 									<Grid item>
 										<TextField
 											type="text"
-											placeholder="Nom d'utilisateur"
+											label="Nom d'utilisateur"
 											fullWidth
-											name="username"
 											variant="outlined"
 											value={this.state.username}
 											onChange={(event) =>
@@ -129,14 +127,19 @@ class LoginForm extends React.Component {
 									<Grid item>
 										<TextField
 											type="password"
-											placeholder="Mot de passe"
+											label="Mot de passe"
 											fullWidth
-											name="password"
 											variant="outlined"
 											value={this.state.password}
 											onChange={(event) =>
 												this.handlePassChange(event)
 											}
+											onKeyPress={event => {
+												if (event.code === "Enter" || event.code === "NumpadEnter") {
+													this.dismissError();
+													this.handleSubmit().then();
+												}
+											}}
 											required
 										/>
 									</Grid>
@@ -148,9 +151,9 @@ class LoginForm extends React.Component {
 											color="primary"
 											type="submit"
 											className="button-block"
-											onClick={event => {
+											onClick={() => {
 												this.dismissError();
-												this.handleSubmit().then(r => "");
+												this.handleSubmit().then();
 											}}
 										>
 											Connexion

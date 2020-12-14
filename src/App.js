@@ -2,7 +2,7 @@ import './App.css';
 
 import React from "react";
 import { createMuiTheme, MuiThemeProvider, CssBaseline } from "@material-ui/core";
-import { Helmet } from "react-helmet";
+import { frFR } from "@material-ui/core/locale";
 import Routes from "./routes/Routes";
 
 const theme = createMuiTheme({
@@ -25,17 +25,14 @@ const theme = createMuiTheme({
 		},
 		error : {
 			main : "#ab0b1b"
-		},
-	}
+		}
+	},
+	frFR
 });
 
 function App() {
 	return (
 		<div className="App">
-			<Helmet>
-				<title>ELBAT</title>
-				<meta charSet="utf-8"/>
-			</Helmet>
 			<MuiThemeProvider theme={theme}>
 				<CssBaseline />
 				<Routes />

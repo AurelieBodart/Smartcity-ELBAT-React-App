@@ -1,10 +1,10 @@
 import React from "react";
-import {AppBar, Grid, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Button, Grid, Toolbar, Typography} from "@material-ui/core";
 import {AccountCircle} from "@material-ui/icons";
 import { connect } from "react-redux";
-import { getEstablishment } from "../API";
+import { Link } from "react-router-dom";
 import logo from '../../Logo_Gray.png';
-import AdminButtonsRouter from "../../routes/AdminButtonsRouter";
+import AdminButtonsRouter from "../admin/AdminButtons";
 
 class TopBar extends React.Component {
 	constructor(props) {
@@ -13,14 +13,7 @@ class TopBar extends React.Component {
 		this.state = {
 			user: undefined,
 			role : undefined,
-			establishmentId : undefined,
-			establishmentName : undefined
 		}
-	}
-
-	componentWillReceiveProps(nextProps, nextContext) {
-		if(nextProps.userStore !== undefined)
-			this.setState({ user : this.props.userStore });
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -28,9 +21,6 @@ class TopBar extends React.Component {
 			this.setState({ user : this.props.userStore });
 		else if(this.state.role === undefined)
 			this.defineRole();
-
-		if(this.state.role === "waiter" && this.state.establishmentName === undefined)
-			this.findEstablishmentName();
 	}
 
 	defineRole() {
@@ -39,16 +29,6 @@ class TopBar extends React.Component {
 				this.setState({role : "admin"});
 			else if (accessLevel.accessLevel.split("_")[0] === "waiter")
 				this.setState({ role: "waiter", establishmentId: parseInt(accessLevel.establishmentId) });
-		}
-	}
-
-	findEstablishmentName() {
-		try {
-			getEstablishment(this.state.establishmentId).then(response => {
-				this.setState({establishmentName: response.data.name});
-			});
-		} catch (e) {
-			console.log(e.message);
 		}
 	}
 
@@ -61,22 +41,22 @@ class TopBar extends React.Component {
 			</Grid>
 
 		if (this.state.user !== undefined) {
-
 			if (this.state.role === "admin") {
-
 				UserContent =
-					<Grid container>
-						<Grid item style={{flex: "auto"}}>
-							<img src={logo} className="App-logo" alt="logo" />
-
+					<Grid container direction="row" alignItems="center">
+						<Grid item>
+							<Button component={Link} to={"/"}>
+								<img src={logo} className="App-logo" alt="logo" />
+								<Typography variant="h6"  color={"secondary"} align="left" style={{display: "inline"}}>Panel admin</Typography>
+							</Button>
 						</Grid>
-						<Grid item style={{flex: "auto"}}>
-							<Typography variant="h6" align="left">Panel admin</Typography>
+						<Grid item style={{flex: "auto"}}/>
+						<Grid item>
+							<AdminButtonsRouter />
 						</Grid>
-						<AdminButtonsRouter/>
 						<Grid
 							item
-							alignitems="center"
+							style={{marginLeft: "20px"}}
 						>
 							<AccountCircle
 								style={{
@@ -91,21 +71,19 @@ class TopBar extends React.Component {
 							</Typography>
 						</Grid>
 					</Grid>
-
 			} else {
-
 				UserContent =
-					<Grid container>
-						<Grid item style={{flex: "auto"}}>
-							<img src={logo} className="App-logo" alt="logo" />
-							<Typography
-								variant="h6"
-								align="left"
-							>{this.state.establishmentName}</Typography>
+					<Grid container direction="row" alignItems="center">
+						<Grid item>
+							<Button component={Link} to={"/"}>
+								<img src={logo} className="App-logo" alt="logo" />
+								<Typography variant="h6" align="left" color={"secondary"} style={{display: "inline"}}>{this.props.establishmentStore?.name}</Typography>
+							</Button>
 						</Grid>
+						<Grid style={{flex: "auto"}}/>
 						<Grid
 							item
-							alignitems="center"
+							style={{marginLeft: "20px"}}
 						>
 							<AccountCircle
 								style={{
@@ -135,8 +113,9 @@ class TopBar extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		userStore : state.login.userStore
+		userStore : state.login.userStore,
+		establishmentStore : state.establishmentChosen.establishmentStore
 	}
 };
 
-export default connect(mapStateToProps, undefined)(TopBar);
+export default connect(mapStateToProps)(TopBar);

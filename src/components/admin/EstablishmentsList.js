@@ -36,8 +36,8 @@ class EstablishmentsList extends Component {
             .catch(e => console.log(e.message));
     }
 
-    addEstablishementToStore(item){
-        return () => this.props.establishmentToEdit(item);
+    addEstablishmentToStore(item){
+        return () => this.props.establishmentChosen(item);
     }
 
     render() {
@@ -50,9 +50,11 @@ class EstablishmentsList extends Component {
                             variant="contained"
                             color="secondary"
                             component={Link} to={"/editEstablishment"}
-                            onClick={this.addEstablishementToStore(item)}
+                            onClick={this.addEstablishmentToStore(item)}
+                            key={item.name}
+                            style={{margin: "10px", width: "250px", height: "60px"}}
                         >
-                            <Typography color={"primary"}>{item.name}</Typography>
+                            {item.name}
                         </Button>
                     })}
             </div>
@@ -62,8 +64,8 @@ class EstablishmentsList extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        establishmentToEdit : (establishment) => {
-            dispatch({type : "establishmentToEdit", payload : {establishmentInfo : establishment}});
+        establishmentChosen : (establishment) => {
+            dispatch({type : "establishment", payload : {establishmentInfo : establishment}});
         }
     }
 }
