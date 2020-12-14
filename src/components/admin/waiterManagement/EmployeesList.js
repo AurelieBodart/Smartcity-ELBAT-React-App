@@ -57,9 +57,9 @@ class EmployeesList extends React.Component {
 		if (confirmation) {
 			removeWaiterFromEstablishment(userId, this.state.establishmentId).then(() => {
 				const waiters = this.state.waiters.filter(waiter => waiter.id !== userId);
-
+				console.log(waiters);
 				window.alert("La suppression du serveur a réussi !");
-				this.setState({waiters: [...waiters]});
+				this.setState({waiters: [...waiters], selectedIndex: undefined, formType: undefined});
 			}).catch(error => {
 				window.alert("Erreur lors du retrait du lien entre l'employé et l'établissement. " + error);
 			});
@@ -186,7 +186,7 @@ class EmployeesList extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		establishmentStore : state.establishmentToEdit.establishmentStore
+		establishmentStore : state.establishmentChosen.establishmentStore
 	}
 }
 

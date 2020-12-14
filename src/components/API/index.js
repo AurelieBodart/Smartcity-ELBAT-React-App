@@ -14,6 +14,10 @@ const getEstablishment = async (establishmentId) => {
 	else throw new Error("L'identifiant de l'établissement est manquant !");
 }
 
+const getEstablishments = async (...establishmentIds) => {
+	return await api.getEstablishments(...establishmentIds);
+}
+
 const getAllEstablishments = async () => {
 	return await api.getAllEstablishments();
 }
@@ -86,9 +90,33 @@ const updatePassword = async (username, previousPassword, newPassword) => {
 	else throw new Error("Tous les champs doivent être remplis afin de continuer !");
 }
 
+const getDateReservations = async (establishmentId, date) => {
+	if (establishmentId && date)
+		return api.getDateReservations(establishmentId, date);
+	else throw new Error("Il faut choisir une date pour continuer !");
+}
+
+const setArrivalTime = async (personId, dateTimeReserved) => {
+	if (personId !== undefined && dateTimeReserved !== undefined)
+		return api.setArrivalTime(personId, dateTimeReserved);
+	else throw new Error("Tous les champs doivent être remplis !");
+}
+
+const setExitTime = async (personId, dateTimeReserved) => {
+	if (personId !== undefined && dateTimeReserved !== undefined)
+		return api.setExitTime(personId, dateTimeReserved);
+	else throw new Error("Tous les champs doivent être remplis !");
+}
+
+const cancelReservation = async (personId, dateTimeReserved) => {
+	if (personId !== undefined && dateTimeReserved !== undefined)
+		return api.cancelReservation(personId, dateTimeReserved);
+	else throw new Error("Tous les champs doivent être remplis !");
+}
 export {
 	login,
 	getEstablishment,
+	getEstablishments,
 	getAllEstablishments,
 	postEstablishment,
 	postTable,
@@ -100,5 +128,9 @@ export {
 	addToEstablishment,
 	getUsersByEstablishmentId,
 	removeWaiterFromEstablishment,
-	updatePassword
+	updatePassword,
+	getDateReservations,
+	setArrivalTime,
+	setExitTime,
+	cancelReservation
 }

@@ -37,7 +37,7 @@ class EstablishmentsList extends Component {
     }
 
     addEstablishmentToStore(item){
-        return () => this.props.establishmentToEdit(item);
+        return () => this.props.establishmentChosen(item);
     }
 
     render() {
@@ -64,7 +64,7 @@ class EstablishmentsList extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        establishmentToEdit : (establishment) => {
+        establishmentChosen : (establishment) => {
             dispatch({type : "establishment", payload : {establishmentInfo : establishment}});
         }
     }

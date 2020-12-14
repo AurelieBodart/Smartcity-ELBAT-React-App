@@ -29,7 +29,7 @@ export default class AlreadyRegisteredUser extends React.Component {
 				})
 				.catch((error) => {
 					console.log(error);
-					this.setState({error: true, errorMessage: error});
+					this.setState({error: true, errorMessage: error.message});
 				});
 		} else this.setState({error: true, errorMessage: "Tous les champs doivent être remplis !"});
 	}
@@ -38,7 +38,7 @@ export default class AlreadyRegisteredUser extends React.Component {
 		let Error = undefined;
 
 		if (this.state.error !== undefined && this.state.error === true) {
-			Error = <Typography color={"error"}>Erreur ! {this.state.errorMessage}</Typography>
+			Error = <Typography color={"error"}>{this.state.errorMessage}</Typography>
 		}
 
 		return (

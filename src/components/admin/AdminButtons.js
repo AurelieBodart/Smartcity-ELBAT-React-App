@@ -6,7 +6,7 @@ import {Button, ButtonGroup, Grid} from "@material-ui/core";
 import BusinessIcon from "@material-ui/icons/Business";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
-export default function adminButtonsRouter () {
+export default function adminButtons () {
     return (
         <div>
             <Grid container>

@@ -67,7 +67,7 @@ class EditEstablishment extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        establishmentStore : state.establishmentToEdit.establishmentStore
+        establishmentStore : state.establishmentChosen.establishmentStore
     }
 }
 

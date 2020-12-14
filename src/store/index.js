@@ -18,6 +18,6 @@ const establishmentReducer = (state = {establishment : {}}, action) => {
     }
 }
 
-const store = createStore(combineReducers({ login: userReducer, establishmentToEdit : establishmentReducer }));
+const store = createStore(combineReducers({ login: userReducer, establishmentChosen : establishmentReducer }));
 
 export default store;

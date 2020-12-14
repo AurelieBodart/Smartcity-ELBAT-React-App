@@ -26,7 +26,7 @@ export default class AddWaiter extends React.Component {
             getAllEstablishments().then(values => {
                 this.setState({establishments: [...values]});
             }).catch(e => {
-                console.log(e);
+                window.alert(e);
             });
         }
     }

@@ -35,6 +35,27 @@ const getEstablishment = async (establishmentId) => {
 	return response.data;
 }
 
+const getEstablishments = async (...establishmentIds) => {
+	let establishments = [];
+
+	for (const establishmentId of establishmentIds) {
+		const response = await axios.get(`${API_URL}/establishment/${establishmentId}`, {
+			headers: header
+		}).catch((error) => {
+			if (error.response.status === 401)
+				throw new Error("Votre session est échue, veuillez vous reconnecter.");
+			else if (error.response.status === 400)
+				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 500)
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+		});
+
+		establishments.push(response.data);
+	}
+
+	return establishments;
+}
+
 const getAllEstablishments = async () => {
 	const response = await axios.get(API_URL + "/establishment/", {
 		headers: header
@@ -73,7 +94,6 @@ const updateEstablishment = async (establishment) => {
 		country : establishment.country,
 		city : establishment.city,
 		postalCode : establishment.postalCode
-
 	},{headers: header});
 	return response.data;
 }
@@ -126,9 +146,9 @@ const linkToEstablishment = async (username, establishmentId) => {
 		if (error.response.status === 401)
 			throw new Error("Votre session est échue, veuillez vous reconnecter.");
 		else if (error.response.status === 400)
-			throw new Error("Les données fournies sont insuffisantes. Réeesayer.");
+			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
 		else if (error.response.status === 500)
-			throw new Error("Erreur d'accès à l'API. Veuillez recommencer dans quelques instants");
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
 
 	return response.data;
@@ -140,9 +160,9 @@ const getUserViaUsername = async (username) => {
 			if (error.response.status === 401)
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
-				throw new Error("Les données fournies sont insuffisantes. Réeesayer.");
+				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
 			else if (error.response.status === 500)
-				throw new Error("Erreur d'accès à l'API. Veuillez recommencer dans quelques instants");
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
 
 	return response.data;
@@ -171,9 +191,9 @@ const addToEstablishment = async (establishmentId, username, email, password, na
 		if (error.response.status === 401)
 			throw new Error("Votre session est échue, veuillez vous reconnecter.");
 		else if (error.response.status === 400)
-			throw new Error("Les données fournies sont insuffisantes. Réeesayer.");
+			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
 		else if (error.response.status === 500)
-			throw new Error("Erreur d'accès à l'API. Veuillez recommencer dans quelques instants");
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
 
 	if (addUserResponse.status === 201) {
@@ -187,9 +207,9 @@ const getUsersByEstablishmentId = async (establishmentId) => {
 			if (error.response.status === 401)
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
-				throw new Error("Les données fournies sont insuffisantes. Réeesayer.");
+				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
 			else if (error.response.status === 500)
-				throw new Error("Erreur d'accès à l'API. Veuillez recommencer dans quelques instants");
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
 
 	return getUsersResponse.data;
@@ -206,9 +226,9 @@ const removeWaiterFromEstablishment = async (userId, establishmentId) => {
 		if (error.response.status === 401)
 			throw new Error("Votre session est échue, veuillez vous reconnecter.");
 		else if (error.response.status === 400)
-			throw new Error("Les données fournies sont insuffisantes. Réeesayer.");
+			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
 		else if (error.response.status === 500)
-			throw new Error("Erreur d'accès à l'API. Veuillez recommencer dans quelques instants");
+			throw new Error("Erreur lors du traitement de votre demande.");
 	});
 
 	return removeWaiterResponse.data;
@@ -225,10 +245,79 @@ const updatePassword = async (username, previousPassword, newPassword) => {
 		if (error.response.status === 401)
 			throw new Error("Votre session est échue, veuillez vous reconnecter.");
 		else if (error.response.status === 400)
-			throw new Error("Les données fournies sont insuffisantes. Réeesayer.");
+			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
 		else if (error.response.status === 500)
-			throw new Error("Erreur d'accès à l'API. Veuillez recommencer dans quelques instants");
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
+	console.log(response)
+	return response.data;
+}
+
+const getDateReservations = async (establishmentId, date) => {
+	const response = await axios.get(`${API_URL}/reservation/${establishmentId}/${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`, {
+		headers: header
+	}).catch((error) => {
+		if (error.response.status === 401)
+			throw new Error("Votre session est échue, veuillez vous reconnecter.");
+		else if (error.response.status === 400)
+			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+		else if (error.response.status === 500)
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+	});
+
+	// La réponse peut être undefined en cas de 404 (pas de réservation pour le jour choisi)
+	return response?.data;
+}
+
+const setArrivalTime = async (personId, dateTimeReserved) => {
+	const response = await axios.patch(`${API_URL}/reservation/arrivingTime`, {
+		idPerson: personId,
+		dateTimeReserved,
+		arrivingTime: new Date().toLocaleTimeString()
+	}, { headers: header})
+		.catch((error) => {
+			if (error.response.status === 401)
+				throw new Error("Votre session est échue, veuillez vous reconnecter.");
+			else if (error.response.status === 400)
+				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 500)
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+		});
+
+	return response.data;
+}
+
+const setExitTime = async (personId, dateTimeReserved) => {
+	const response = await axios.patch(`${API_URL}/reservation/exitTime`, {
+		idPerson: personId,
+		dateTimeReserved,
+		exitTime: new Date().toLocaleTimeString()
+	}, { headers: header})
+		.catch((error) => {
+			if (error.response.status === 401)
+				throw new Error("Votre session est échue, veuillez vous reconnecter.");
+			else if (error.response.status === 400)
+				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 500)
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+		});
+
+	return response.data;
+}
+
+const cancelReservation = async (personId, dateTimeReserved) => {
+	const response = await axios.patch(`${API_URL}/reservation/cancel`, {
+		idPerson: personId,
+		dateTimeReserved
+	}, { headers: header})
+		.catch((error) => {
+			if (error.response.status === 401)
+				throw new Error("Votre session est échue, veuillez vous reconnecter.");
+			else if (error.response.status === 400)
+				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 500)
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+		});
 
 	return response.data;
 }
@@ -236,6 +325,7 @@ const updatePassword = async (username, previousPassword, newPassword) => {
 export {
 	login,
 	getEstablishment,
+	getEstablishments,
 	getAllEstablishments,
 	addEstablishment,
 	addTable,
@@ -247,5 +337,9 @@ export {
 	addToEstablishment,
 	getUsersByEstablishmentId,
 	removeWaiterFromEstablishment,
-	updatePassword
+	updatePassword,
+	getDateReservations,
+	setArrivalTime,
+	setExitTime,
+	cancelReservation
 }

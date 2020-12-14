@@ -13,8 +13,9 @@ import TopBar from "../components/TopBar";
 import EditEstablishment from "../components/admin/establishmentManagement/EditEstablishment";
 import UpdateEstablishment from "../components/admin/establishmentManagement/UpdateEstablishment";
 import {connect} from "react-redux";
-import Waiter from "../components/waiter";
 import EmployeesList from "../components/admin/waiterManagement/EmployeesList";
+import ChooseEstablishment from "../components/waiter/ChooseEstablishment";
+import ReservationsList from "../components/waiter/ReservationsManagement";
 
 class Routes extends React.Component {
 	constructor(props) {
@@ -70,7 +71,9 @@ class Routes extends React.Component {
 						<Route path="/" exact render={
 							() => {
 								return this.state.user === undefined ? <Redirect to="/login"/> :
-									(this.state.user.accessLevels.some(accessLevel => accessLevel.accessLevel === "admin") ? <EstablishmentsList/> : <Waiter/>)
+									(this.state.user.accessLevels.some(accessLevel => accessLevel.accessLevel === "admin") ?
+										<EstablishmentsList/> :
+											(this.props.establishmentStore === undefined ? <ChooseEstablishment />  : <ReservationsList/>))
 							}
 						}/>
 					</Switch>
@@ -82,7 +85,8 @@ class Routes extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		userStore: state.login.userStore
+		userStore: state.login.userStore,
+		establishmentStore : state.establishmentChosen.establishmentStore
 	}
 };
 
