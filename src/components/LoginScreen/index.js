@@ -6,8 +6,10 @@ import {
 	Paper,
 	Typography
 } from "@material-ui/core";
+import {Redirect} from "react-router-dom";
 import LoginIcon from "@material-ui/icons/AccountCircle"
 import { login } from "../API";
+import {connect} from "react-redux";
 
 class LoginForm extends React.Component {
 	constructor(props) {
@@ -20,7 +22,7 @@ class LoginForm extends React.Component {
 			loading: false,
 			error: false,
 			errorMessage: "",
-			redirect: false
+			connected: false
 		};
 	}
 
@@ -39,13 +41,18 @@ class LoginForm extends React.Component {
 		try {
 			const data = await login(this.state.username, this.state.password);
 
-			console.log(data);
+			if (data.accessLevels.length === 1)
+				throw new Error("Un client ne peut se connecter à cette partie de l'application !");
+
+			this.props.login(data);
+			this.setState({connected : true});
+
 		} catch (e) {
 			this.setState({
 				error: true,
 				loading: false,
 				loaded: true,
-				errorMessage: e.message === "Request failed with status code 401" ? "Utilisateur inconnu" : e.message
+				errorMessage: e.message
 			});
 		}
 	}
@@ -63,6 +70,9 @@ class LoginForm extends React.Component {
 	}
 
 	render() {
+		if (this.state.connected === true)
+			return <Redirect to="/" />
+
 		let Content;
 
 		if (this.state.loaded === false)
@@ -70,12 +80,12 @@ class LoginForm extends React.Component {
 		else if (this.state.loading === true)
 			Content =
 				<Grid item>
-					<Typography component="h6">Chargement en cours...</Typography>
+					<Typography component="h6" color="error">Chargement en cours...</Typography>
 				</Grid>;
 		else if (this.state.error)
 			Content =
 				<Grid item>
-					<Typography component="h6">{this.state.errorMessage}</Typography>
+					<Typography component="h6" color="error">{this.state.errorMessage}</Typography>
 				</Grid>;
 
 		return (
@@ -103,15 +113,12 @@ class LoginForm extends React.Component {
 									<Grid item>
 										<TextField
 											type="text"
-											placeholder="Nom d'utilisateur"
+											label="Nom d'utilisateur"
 											fullWidth
-											name="username"
 											variant="outlined"
 											value={this.state.username}
 											onChange={(event) =>
-												this.setState({
-													[event.target.name]: event.target.value,
-												})
+												this.handleUserChange(event)
 											}
 											required
 											autoFocus
@@ -120,16 +127,19 @@ class LoginForm extends React.Component {
 									<Grid item>
 										<TextField
 											type="password"
-											placeholder="Mot de passe"
+											label="Mot de passe"
 											fullWidth
-											name="password"
 											variant="outlined"
 											value={this.state.password}
 											onChange={(event) =>
-												this.setState({
-													[event.target.name]: event.target.value,
-												})
+												this.handlePassChange(event)
 											}
+											onKeyPress={event => {
+												if (event.code === "Enter" || event.code === "NumpadEnter") {
+													this.dismissError();
+													this.handleSubmit().then();
+												}
+											}}
 											required
 										/>
 									</Grid>
@@ -141,9 +151,9 @@ class LoginForm extends React.Component {
 											color="primary"
 											type="submit"
 											className="button-block"
-											onClick={event => {
+											onClick={() => {
 												this.dismissError();
-												this.handleSubmit().then(r => "");
+												this.handleSubmit().then();
 											}}
 										>
 											Connexion
@@ -159,4 +169,12 @@ class LoginForm extends React.Component {
 	}
 }
 
-export default LoginForm;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		login: (user) => {
+			dispatch({type: "login", payload:{ userInfo: user }});
+		}
+	}
+};
+
+export default connect(undefined, mapDispatchToProps)(LoginForm);

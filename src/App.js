@@ -1,10 +1,9 @@
 import './App.css';
 
-import LoginScreen from "./components/LoginScreen";
-import TopBar from "./components/TopBar";
 import React from "react";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import { Helmet } from "react-helmet";
+import { createMuiTheme, MuiThemeProvider, CssBaseline } from "@material-ui/core";
+import { frFR } from "@material-ui/core/locale";
+import Routes from "./routes/Routes";
 
 const theme = createMuiTheme({
 	palette: {
@@ -19,20 +18,24 @@ const theme = createMuiTheme({
 			light: "#ffffff",
 			dark: "#aeaeae",
 			contrastText: "#000000"
+		},
+		background: {
+			default: "#373737",
+			paper: "#bdbdbd"
+		},
+		error : {
+			main : "#ab0b1b"
 		}
-	}
+	},
+	frFR
 });
 
 function App() {
 	return (
-		<div>
-			<Helmet>
-				<title>ELBAT</title>
-				<meta charSet="utf-8"/>
-			</Helmet>
+		<div className="App">
 			<MuiThemeProvider theme={theme}>
-				<TopBar />
-				<LoginScreen />
+				<CssBaseline />
+				<Routes />
 			</MuiThemeProvider>
 		</div>
 	);
