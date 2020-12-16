@@ -36,7 +36,7 @@ export default class AddWaiter extends React.Component {
 
         if (this.state.form !== undefined) {
             Content = (this.state.form === "newUser") ? <NewWaiter establishments={this.state.establishments} /> :
-                <AlreadyRegisteredUser establishments={this.state.establishments}/>
+                <AlreadyRegisteredUser establishments={this.state.establishments} />
         }
 
         return (

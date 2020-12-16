@@ -12,7 +12,7 @@ import {
 	Button, TextField
 } from "@material-ui/core";
 import {Delete, Edit, VpnKey} from "@material-ui/icons";
-import { getUsersByEstablishmentId, removeWaiterFromEstablishment, updatePassword } from "../../API";
+import {getUsersByEstablishmentId, removeWaiterFromEstablishment, updatePassword, updateUser} from "../../API";
 import WaiterManagement from "./WaiterManagement";
 import {allDefined} from "../../../utils";
 
@@ -27,7 +27,61 @@ class EmployeesList extends React.Component {
 	}
 
 	componentDidMount() {
-		getUsersByEstablishmentId(this.state.establishmentId).then(waiters => { this.setState({waiters: [...waiters]}) });
+		this.getWaiters();
+	}
+
+	getWaiters() {
+		getUsersByEstablishmentId(this.state.establishmentId)
+			.then(waiters => {
+				this.setState({waiters: [...waiters], formType: undefined});
+			});
+	}
+
+	loadUserData(userData) {
+		if (userData !== undefined) {
+			this.setState({
+				waiter: {
+					username: userData.username !== undefined ? userData.username : this.state.waiter.username,
+					email: userData.email !== undefined ? userData.email : this.state.waiter.email,
+					password: userData.password !== undefined ? userData.password : this.state.waiter.password,
+					passwordConfirmation: userData.passwordConfirmation !== undefined ? userData.passwordConfirmation : this.state.waiter.passwordConfirmation,
+					lastName: userData.lastName !== undefined ? userData.lastName : this.state.waiter.lastName,
+					firstName: userData.firstName !== undefined ? userData.firstName : this.state.waiter.firstName,
+					gender: userData.gender !== undefined ? userData.gender : this.state.waiter.gender,
+					birthDate: userData.birthDate !== undefined ? userData.birthDate : this.state.waiter.birthDate,
+					phoneNumber: userData.phoneNumber !== undefined ? userData.phoneNumber : this.state.waiter.phoneNumber,
+					street: userData.street !== undefined ? userData.street : this.state.waiter.street,
+					number: userData.number !== undefined ? userData.number : this.state.waiter.number,
+					postalCode: userData.postalCode !== undefined ? userData.postalCode : this.state.waiter.postalCode,
+					city: userData.city !== undefined ? userData.city : this.state.waiter.city,
+					country: userData.country !== undefined ? userData.country : this.state.waiter.country
+				}
+			});
+		}
+	}
+
+	updateUserData() {
+		console.log(this.state)
+		if (allDefined(this.state.waiter.username, this.state.waiter.lastName, this.state.waiter.firstName, this.state.waiter.gender, this.state.waiter.birthDate, this.state.waiter.phoneNumber, this.state.waiter.street, this.state.waiter.number, this.state.waiter.postalCode, this.state.waiter.city, this.state.waiter.country)) {
+			updateUser(this.state.waiterId,
+				this.state.waiter.username,
+				this.state.waiter.lastName,
+				this.state.waiter.firstName,
+				this.state.waiter.gender,
+				this.state.waiter.birthDate,
+				this.state.waiter.phoneNumber,
+				this.state.waitersAddressId,
+				this.state.waiter.street,
+				this.state.waiter.number,
+				this.state.waiter.postalCode,
+				this.state.waiter.city,
+				this.state.waiter.country).then(() => {
+					window.alert(`Les informations de ${this.state.waiter.firstName} ${this.state.waiter.lastName} ont bien été modifiées !`);
+					this.getWaiters();
+				}).catch((error) => {
+				this.setState({error: true, errorMessage: error.message});
+			});
+		} else this.setState({error: true, errorMessage: "Tous les champs doivent être remplis !"});
 	}
 
 	submitPasswordUpdate() {
@@ -39,16 +93,17 @@ class EmployeesList extends React.Component {
 			const passwordConfirmation = this.state.passwordConfirmation.trim();
 
 			if (newPassword === passwordConfirmation) {
-				updatePassword(this.state.waiters.find(waiter => this.state.selectedIndex === waiter.id).username, previousPassword, newPassword).then(
+				updatePassword(this.state.waiter.username, previousPassword, newPassword).then(
 					() => {
 						window.alert("La mise à jour a réussi !");
+						this.getWaiters();
 					}
 				)
 				.catch(error => {
-					this.setState({error: true, errorMessage: error});
+					this.setState({error: true, errorMessage: error.message});
 				});
 			} else this.setState({error: true, errorMessage: "Le nouveau mot de passe et sa confirmation ne sont pas égaux !"});
-		} else this.setState({error: true, errorMessage: "Tous les champs doivent être remplis"});
+		} else this.setState({error: true, errorMessage: "Tous les champs doivent être remplis !"});
 	}
 
 	dismissWaiter(userId) {
@@ -56,10 +111,8 @@ class EmployeesList extends React.Component {
 
 		if (confirmation) {
 			removeWaiterFromEstablishment(userId, this.state.establishmentId).then(() => {
-				const waiters = this.state.waiters.filter(waiter => waiter.id !== userId);
-				console.log(waiters);
 				window.alert("La suppression du serveur a réussi !");
-				this.setState({waiters: [...waiters], selectedIndex: undefined, formType: undefined});
+				this.getWaiters();
 			}).catch(error => {
 				window.alert("Erreur lors du retrait du lien entre l'employé et l'établissement. " + error);
 			});
@@ -68,31 +121,35 @@ class EmployeesList extends React.Component {
 
 	render() {
 		let EmployeeContent;
+		const Error = this.state.error ? <Typography>{this.state.errorMessage}</Typography> : undefined;
 
 		if (this.state.formType !== undefined) {
-			const waiter = this.state.waiters.find(waiter => waiter.id === this.state.selectedIndex);
-
 			if (this.state.formType === "informationUpdate") {
 				EmployeeContent = (
 					<Paper
 						style={{margin: "0 20px 20px 20px", flex: "auto"}}
 					>
 						<Typography variant={"h3"} color={"primary"}>
-							Modifier les informations de {waiter.firstName} {waiter.lastName}
+							Modifier les informations de {this.state.waiter.firstName} {this.state.waiter.lastName}
 						</Typography>
-						<WaiterManagement user={waiter}/>
-						<Button variant={"contained"} color={"primary"} style={{marginBottom: "20px"}}>
+						<WaiterManagement user={this.state.waiter} callback={(userData) => {this.loadUserData(userData)}} />
+						<Button
+							variant={"contained"}
+							color={"primary"}
+							style={{marginBottom: "20px"}}
+							onClick={() => {
+								this.updateUserData();
+							}}
+						>
 							Confirmer la mise à jour de la personne
 						</Button>
 					</Paper>
 				);
 			} else if (this.state.formType === "passwordUpdate") {
-				const Error = this.state.error ? <Typography>{this.state.errorMessage}</Typography> : undefined;
-
 				EmployeeContent = (
 					<Paper style={{margin: "0 20px 20px 20px", flex: "auto"}}>
 						<Typography variant={"h3"} color={"primary"}>
-							Changement du mot de passe de {waiter.firstName} {waiter.lastName}
+							Changement du mot de passe de {this.state.waiter.firstName} {this.state.waiter.lastName}
 						</Typography>
 						<Grid container direction={"column"} alignItems={"center"}>
 							<TextField
@@ -155,12 +212,14 @@ class EmployeesList extends React.Component {
 										<ListItem key={waiter.id}>
 											<ListItemText primary={`${waiter.firstName} ${waiter.lastName}`} />
 											<Tooltip title={"Modifier les informations de la personne"} placement={"top"}>
-												<IconButton onClick={() => {this.setState({formType: "informationUpdate", selectedIndex: waiter.id})}}>
+												<IconButton onClick={() => {
+													this.setState({formType: "informationUpdate", waiter, waitersAddressId: waiter.addressId, waiterId: waiter.id})
+												}}>
 													<Edit />
 												</IconButton>
 											</Tooltip>
 											<Tooltip title={"Modifier le mot de passe de la personne"} placement={"top"}>
-												<IconButton onClick={() => {this.setState({formType: "passwordUpdate", selectedIndex: waiter.id})}}>
+												<IconButton onClick={() => {this.setState({formType: "passwordUpdate", waiter})}}>
 													<VpnKey />
 												</IconButton>
 											</Tooltip>
