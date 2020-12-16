@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, Grid, IconButton, List, ListItem, ListSubheader, Paper, Typography} from "@material-ui/core";
+import {Link} from "react-router-dom"
 import ReservationDetails from "./ReservationDetails";
 import { getDateReservations as getReservationDetails } from "../API";
 import {connect} from "react-redux";
@@ -25,20 +26,19 @@ class ReservationsManagement extends React.Component {
 	updateList() {
 		this.setState({reservations: []});
 
-		getReservationDetails(this.state.establishmentStore.id, this.state.date).then(reservations => {
+		getReservationDetails(this.state.establishmentStore.id, this.state.date).then((reservations) => {
 			if (reservations !== undefined) {
 				this.setState({reservations: [...(reservations.sort((a, b) => {
 					const date1 = new Date(a.dateTimeReserved);
-					const date2 = new Date(b.dateTimeReserved)
+					const date2 = new Date(b.dateTimeReserved);
 
-						return  date1 < date2 ? -1 :
-						date1 > date2 ? 1 : 0;
+					return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
 				}))]});
 			}
-		}).catch(error => {
+		}).catch((error) => {
 			window.alert(error);
 			clearInterval(this.state.intervalId);
-			this.setState({intervalId: undefined})
+			this.setState({intervalId: undefined});
 		})
 	}
 
@@ -50,9 +50,8 @@ class ReservationsManagement extends React.Component {
 						<Button
 							variant={"contained"}
 							color={"primary"}
-							onClick={() => {
-								console.log("click")
-							}}
+							component={Link} to={"/newReservation"}
+							onClick={() => clearInterval(this.state.intervalId)}
 							fullWidth
 						>
 							Ajouter une réservation

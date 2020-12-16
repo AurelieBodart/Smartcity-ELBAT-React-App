@@ -16,6 +16,7 @@ import {connect} from "react-redux";
 import EmployeesList from "../components/admin/waiterManagement/EmployeesList";
 import ChooseEstablishment from "../components/waiter/ChooseEstablishment";
 import ReservationsList from "../components/waiter/ReservationsManagement";
+import NewReservation from "../components/waiter/NewReservation";
 
 class Routes extends React.Component {
 	constructor(props) {
@@ -67,13 +68,19 @@ class Routes extends React.Component {
 									(this.state.user.accessLevels.some(accessLevel => accessLevel.accessLevel === "admin") ? <EmployeesList/> : <Redirect to="/"/>)
 							}
 						}/>
+						<Route path="/newReservation" render={
+							() => {
+								return this.state.user === undefined ? <Redirect to="/login" /> :
+									(this.state.user.accessLevels.some(accessLevel =>  accessLevel.accessLevel.includes("waiter")) ? <NewReservation /> : <Redirect to="/"/>);
+							}
+						}/>
 						<Route path="/login" component={LoginForm}/>
-						<Route path="/" exact render={
+						<Route path="/" render={
 							() => {
 								return this.state.user === undefined ? <Redirect to="/login"/> :
 									(this.state.user.accessLevels.some(accessLevel => accessLevel.accessLevel === "admin") ?
 										<EstablishmentsList/> :
-											(this.props.establishmentStore === undefined ? <ChooseEstablishment />  : <ReservationsList/>))
+											(this.props.establishmentStore === undefined ? <ChooseEstablishment /> : <ReservationsList/>))
 							}
 						}/>
 					</Switch>

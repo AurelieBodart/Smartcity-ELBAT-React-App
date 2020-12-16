@@ -22,7 +22,11 @@ class EstablishmentsList extends Component {
                     if(prevState.establishment !== result)
                         this.setState({establishments : result});
                 })
-                .catch(e => console.log(e.message));
+                .catch(e => {
+                    console.log(e.message);
+                    this.setState({error: true, errorMessage: e.message});
+
+                });
 
             this.setState({loadEstablishment : false})
         }
@@ -33,7 +37,10 @@ class EstablishmentsList extends Component {
             .then(result => {
                 this.setState({establishments : result});
             })
-            .catch(e => console.log(e.message));
+            .catch(e => {
+                console.log(e.message);
+                this.setState({error: true, errorMessage: e.message});
+            });
     }
 
     addEstablishmentToStore(item){
@@ -41,6 +48,12 @@ class EstablishmentsList extends Component {
     }
 
     render() {
+        let Error = undefined;
+
+        if (this.state.error !== undefined && this.state.error === true) {
+            Error = <Typography color={"error"}>{this.state.errorMessage}</Typography>
+        }
+
         return (
             <div>
                 <Typography variant={"h3"} color={"secondary"}>Listing des établissements</Typography>
@@ -57,6 +70,9 @@ class EstablishmentsList extends Component {
                             {item.name}
                         </Button>
                     })}
+
+                {Error && Error}
+
             </div>
         );
     }

@@ -21,7 +21,10 @@ class UpdateEstablishment extends React.Component {
     componentDidMount() {
         getAllTables(this.props.establishmentStore.id)
             .then(response => this.setState({tablesBeforeUpdate : response}))
-            .catch(e => console.log(e.message));
+            .catch(e => {
+                console.log(e.message);
+                this.setState({error: true, errorMessage: e.message});
+            });
     }
 
     loadEstablishment(establishment){
@@ -55,7 +58,7 @@ class UpdateEstablishment extends React.Component {
             let tablesToAdd = this.state.tablesAfterUpdate.filter(table => !this.state.tablesBeforeUpdate.includes(table));
 
             try {
-                await patchEstablishment(this.state.establishment);
+                await patchEstablishment(this.state.establishment)
 
                 for(let table of tablesToDelete)
                     await deleteTable(table.id, this.state.establishment.id);
@@ -65,14 +68,29 @@ class UpdateEstablishment extends React.Component {
 
             } catch (e) {
                 console.log(e.message);
+                this.setState({error: true, errorMessage: e.message});
             }
         }
     }
 
     render(){
+
+        let Error = undefined;
+
+        if (this.state.error !== undefined && this.state.error === true) {
+            Error = <Typography color={"error"}>{this.state.errorMessage}</Typography>
+        }
+
         return(
             <div>
-                <Typography variant={"h1"} color={"secondary"}>Mise à jour d'un établissement</Typography>
+                <Typography
+                    variant={"h2"}
+                    color={"secondary"}
+                    style={{marginBottom: "30px", marginTop: "20px"}}
+                >
+                    Mise à jour : {this.state.establishment.name}
+                </Typography>
+
 
                 <div className={"cadre"}>
                     <EstablishmentManagement
@@ -87,6 +105,8 @@ class UpdateEstablishment extends React.Component {
                 </div>
 
                 <Typography color={"error"}>{this.state.error}</Typography>
+
+                {Error && Error}
 
                 <Button
                     variant="contained"

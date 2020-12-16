@@ -13,15 +13,17 @@ class TableManagement extends Component {
             inputIsOutside : false,
             error : "",
             sentMessage : "",
-            callback : props.callback
+            callback : props.callback,
+            isCreation: true
         }
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.props.tablesToUpdate !== undefined && this.state.tables.length === 0) {
+        if(this.props.tablesToUpdate !== undefined && this.state.tables.length === 0 && this.state.isCreation) {
             this.setState({
                 tables : [...this.props.tablesToUpdate],
-                id : this.props?.tablesToUpdate[this.props?.tablesToUpdate?.length - 1]?.id + 1
+                id : this.props?.tablesToUpdate[this.props?.tablesToUpdate?.length - 1]?.id + 1,
+                isCreation : false
             });
         }
     }
@@ -80,14 +82,23 @@ class TableManagement extends Component {
 
         return (
             <div>
-                <Typography variant={"h4"} color={"secondary"}>Gestion des tables</Typography>
+                <Typography
+                    variant={"h4"}
+                    color={"secondary"}
+                    style={{marginBottom: "10px"}}
+                >
+                    Gestion des tables
+                </Typography>
+
                 <Typography variant={"h5"} color={"secondary"}>Tables présentes</Typography>
                 <Paper
                     className="table-form"
                     variant="elevation"
                     elevation={2}
                 >
-                    <div style={{ height: 600, width: '100%' }}>
+                    <Typography variant={"h5"} color={"primary"}>Cochez une table pour la supprimer</Typography>
+
+                    <div style={{ height: 450, width: '100%' }}>
                         <DataGrid
                             rows={this.state.tables}
                             columns={columns}
@@ -97,7 +108,6 @@ class TableManagement extends Component {
                             onRowSelected={event => this.deleteTable(event)}
                         />
                     </div>
-                    <Typography variant={"h5"} color={"primary"}>Cochez une table pour la supprimer</Typography>
                 </Paper>
 
                 <Typography variant={"h5"} color={"secondary"}>Ajouter des tables</Typography>
@@ -143,7 +153,7 @@ class TableManagement extends Component {
                         onClick={() => this.addTable()}>Ajouter la table</Button>
                     <Grid>
                         <Typography color={"error"}>{this.state.error}</Typography>
-                        <Typography variant={"h6"} color={"secondary"}>{this.state.sentMessage}</Typography>
+                        <Typography variant={"h6"} color={"primary"}>{this.state.sentMessage}</Typography>
 
                         <Button
                             color="primary"
