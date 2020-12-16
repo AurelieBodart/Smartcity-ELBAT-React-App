@@ -39,24 +39,41 @@ export default class AddEstablishment extends React.Component {
         try {
             const idEstablishment = await postEstablishment(this.state.establishment);
 
-            if(idEstablishment !== undefined) { // TODO undefined ou null ?
+            if(idEstablishment !== undefined) {
                 for (let table of this.state.tables)
                     await postTable(table, idEstablishment);
             }
         } catch (e) {
             console.log(e.message);
+            this.setState({error: true, errorMessage: e.message});
+
         }
     }
 
     render() {
+
+        let Error = undefined;
+
+        if (this.state.error !== undefined && this.state.error === true) {
+            Error = <Typography color={"error"}>{this.state.errorMessage}</Typography>
+        }
+
         return (
             <div>
-                <Typography variant={"h1"} color={"secondary"}>Ajout d'un établissement</Typography>
+                <Typography
+                    variant={"h2"}
+                    color={"secondary"}
+                    style={{marginBottom: "30px", marginTop: "20px"}}
+                >
+                    Ajout d'un établissement
+                </Typography>
 
                 <div className={"cadre"}>
                     <EstablishmentManagement callback={(establishment) => this.loadEstablishment(establishment)}/>
                     <TableManagement callback={(tables) => this.loadTables(tables)}/>
                 </div>
+
+                {Error && Error}
 
                 <Button
                     variant="contained"
