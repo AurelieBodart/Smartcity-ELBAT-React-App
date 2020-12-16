@@ -27,13 +27,27 @@ export default class WaiterManagement extends React.Component {
 			postalCode: props.user?.postalCode,
 			city: props.user?.city,
 			country: props.user?.country,
-			callback: props.callback
+			callback: props.callback,
+			newUser: !!props.newUser
 		}
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		if (prevProps !== this.props) {
-			this.setState({user: this.props.user});
+			this.setState({
+				username: this.props.user?.username,
+				email: this.props.user?.email,
+				name: this.props.user?.lastName,
+				firstName: this.props.user?.firstName,
+				gender: this.props.user?.gender,
+				birthDate: this.props.user?.birthDate,
+				phoneNumber: this.props.user?.phoneNumber,
+				street: this.props.user?.street,
+				number: this.props.user?.number,
+				postalCode: this.props.user?.postalCode,
+				city: this.props.user?.city,
+				country: this.props.user?.country
+			});
 		}
 	}
 
@@ -47,7 +61,7 @@ export default class WaiterManagement extends React.Component {
 					onChange={(event) => {
 						this.state.callback({username: event.target.value});
 					}}
-					disabled={this.state.username !== undefined}
+					disabled={!this.state.newUser}
 					value={this.state.username}
 				/>
 				<TextField
@@ -57,7 +71,7 @@ export default class WaiterManagement extends React.Component {
 					onChange={(event) => {
 						this.state.callback({email: event.target.value});
 					}}
-					disabled={this.state.username !== undefined}
+					disabled={!this.state.newUser}
 					value={this.state.email}
 				/>
 				<TextField
@@ -68,7 +82,7 @@ export default class WaiterManagement extends React.Component {
 					onChange={(event) => {
 						this.state.callback({password: event.target.value});
 					}}
-					disabled={this.state.username !== undefined}
+					disabled={!this.state.newUser}
 					value={this.state.password}
 				/>
 				<TextField
@@ -79,7 +93,7 @@ export default class WaiterManagement extends React.Component {
 					onChange={(event) => {
 						this.state.callback({passwordConfirmation: event.target.value});
 					}}
-					disabled={this.state.username !== undefined}
+					disabled={!this.state.newUser}
 					value={this.state.passwordConfirmation}
 				/>
 				<TextField
@@ -87,7 +101,7 @@ export default class WaiterManagement extends React.Component {
 					style={{minWidth: "450px", marginBottom: "10px"}}
 					label={"Nom"}
 					onChange={(event) => {
-						this.state.callback({name: event.target.value});
+						this.state.callback({lastName: event.target.value});
 					}}
 					value={this.state.name}
 				/>
@@ -103,8 +117,8 @@ export default class WaiterManagement extends React.Component {
 				<FormControl>
 					<RadioGroup
 						row
-						value={this.state.gender !== undefined ? this.state.gender : "Femme"}
-						onChange={(event, value) => this.state.callback({gender: value})}>
+						value={this.state.gender !== undefined ? this.state.gender.toUpperCase() : "F"}
+						onChange={(event) => this.state.callback({gender: event.target.value})}>
 						<FormControlLabel color={"primary"} value="F" control={<Radio />} label="Femme" />
 						<FormControlLabel color={"primary"} value="M" control={<Radio />} label="Homme" />
 						<FormControlLabel color={"primary"} value="O" control={<Radio />} label="Autre" />
@@ -115,8 +129,8 @@ export default class WaiterManagement extends React.Component {
 						margin="normal"
 						label="Date de naissance"
 						format="dd/MM/yyyy"
-						value={this.state.birthDate !== undefined ? this.state.birthDate : new Date(new Date(Date.now()).getFullYear() - 18, new Date(Date.now()).getMonth(), new Date(Date.now()).getDate())}
-						onChange={(date, value) => this.state.callback({birthDate: value})}
+						value={this.state.birthDate !== undefined ? new Date(this.state.birthDate) : new Date(new Date(Date.now()).getFullYear() - 18, new Date(Date.now()).getMonth(), new Date(Date.now()).getDate())}
+						onChange={(date) => this.state.callback({birthDate: date})}
 						style={{minWidth: "450px", marginBottom: "10px"}}
 						invalidDateMessage="Date invalide"
 						maxDate={new Date(new Date(Date.now()).getFullYear() - 18, new Date(Date.now()).getMonth(), new Date(Date.now()).getDate())}
@@ -163,8 +177,8 @@ export default class WaiterManagement extends React.Component {
 					color={"primary"}
 					style={{minWidth: "450px", marginBottom: "10px"}}
 					label={"Localité"}
-					onChange={() => {
-						this.state.callback({city: this.state.city});
+					onChange={(event) => {
+						this.state.callback({city: event.target.value});
 					}}
 					value={this.state.city}
 				/>
@@ -172,12 +186,12 @@ export default class WaiterManagement extends React.Component {
 					color={"primary"}
 					style={{minWidth: "450px", marginBottom: "10px"}}
 					label={"Pays"}
-					onChange={() => {
-						this.state.callback({country: this.state.country});
+					onChange={(event) => {
+						this.state.callback({country: event.target.value});
 					}}
 					value={this.state.country}
 				/>
-				</Grid>
+			</Grid>
 		);
 	}
 }

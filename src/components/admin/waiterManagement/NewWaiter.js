@@ -11,6 +11,7 @@ import {
 import {allDefined} from "../../../utils";
 import { addToEstablishment } from "../../API"
 import WaiterManagement from "./WaiterManagement";
+import {Redirect} from "react-router-dom";
 
 export default class NewWaiter extends React.Component {
 	constructor(props) {
@@ -25,7 +26,7 @@ export default class NewWaiter extends React.Component {
 				email: undefined,
 				password: undefined,
 				passwordConfirmation: undefined,
-				name: undefined,
+				lastName: undefined,
 				firstName: undefined,
 				gender: undefined,
 				birthDate: undefined,
@@ -53,7 +54,7 @@ export default class NewWaiter extends React.Component {
 					email: userData.email !== undefined ? userData.email : this.state.user.email,
 					password: userData.password !== undefined ? userData.password : this.state.user.password,
 					passwordConfirmation: userData.passwordConfirmation !== undefined ? userData.passwordConfirmation : this.state.user.passwordConfirmation,
-					name: userData.name !== undefined ? userData.name : this.state.user.name,
+					lastName: userData.lastName !== undefined ? userData.lastName : this.state.user.lastName,
 					firstName: userData.firstName !== undefined ? userData.firstName : this.state.user.firstName,
 					gender: userData.gender !== undefined ? userData.gender : this.state.user.gender,
 					birthDate: userData.birthDate !== undefined ? userData.birthDate : this.state.user.birthDate,
@@ -71,19 +72,20 @@ export default class NewWaiter extends React.Component {
 	addUserToEstablishment() {
 		this.setState({error: undefined, errorMessage: undefined});
 
-		if (allDefined(this.state.establishmentId, this.state.user.username, this.state.user.email, this.state.user.password, this.state.user.passwordConfirmation, this.state.user.name, this.state.user.firstName, this.state.user.gender, this.state.user.birthDate, this.state.user.phoneNumber, this.state.user.street, this.state.user.number, this.state.user.postalCode, this.state.user.city, this.state.user.country)) {
+		if (allDefined(this.state.establishmentId, this.state.user.username, this.state.user.email, this.state.user.password, this.state.user.passwordConfirmation, this.state.user.lastName, this.state.user.firstName, this.state.user.gender, this.state.user.birthDate, this.state.user.phoneNumber, this.state.user.street, this.state.user.number, this.state.user.postalCode, this.state.user.city, this.state.user.country)) {
 			const password = this.state.user.password.trim();
 			const passwordConfirmation = this.state.user.passwordConfirmation.trim();
 			if (password === passwordConfirmation) {
 				const emailCheckRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 				if (emailCheckRegex.test(this.state.user.email)) {
-					addToEstablishment(this.state.establishmentId, this.state.user.username, this.state.user.email, password, this.state.user.name, this.state.user.firstName, this.state.user.gender, this.state.user.birthDate, this.state.user.phoneNumber, this.state.user.street, this.state.user.number, this.state.user.postalCode, this.state.user.city, this.state.user.country)
+					addToEstablishment(this.state.establishmentId, this.state.user.username, this.state.user.email, password, this.state.user.lastName, this.state.user.firstName, this.state.user.gender, this.state.user.birthDate, this.state.user.phoneNumber, this.state.user.street, this.state.user.number, this.state.user.postalCode, this.state.user.city, this.state.user.country)
 						.then(() => {
-
+							window.alert("L'utilisateur a bien été ajouté à l'établissement !");
+							this.setState({added: true});
 						})
 						.catch((error) => {
-							this.setState({error: true, errorMessage: error})
+							this.setState({error: true, errorMessage: error});
 						});
 				} else this.setState({error: true, errorMessage: "Votre adresse mail n'est pas correcte !"});
 			} else this.setState({error: true, errorMessage: "Les deux mots de passe doivent être les mêmes !"});
@@ -91,10 +93,13 @@ export default class NewWaiter extends React.Component {
 	}
 
 	render() {
+		if (this.state.added === true)
+			return <Redirect to={"/"}/>;
+
 		let Error = undefined;
 
-		if (this.state.error !== undefined && this.state.error === true) {
-			Error = <Typography color={"error"}>Erreur ! {this.state.errorMessage}</Typography>
+		if (this.state.error === true) {
+			Error = <Typography color={"error"}>Erreur ! {this.state.errorMessage.message}</Typography>
 		}
 
 		return (
@@ -116,7 +121,7 @@ export default class NewWaiter extends React.Component {
 						}
 					</Select>
 				</FormControl>
-				<WaiterManagement callback={(userData) => {this.loadUserData(userData)}} />
+				<WaiterManagement user={this.state.user} newUser callback={(userData) => {this.loadUserData(userData)}} />
 				{Error && Error}
 				<Button
 					color={"primary"}

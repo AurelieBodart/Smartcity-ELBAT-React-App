@@ -1,6 +1,7 @@
 import React from "react";
 import {Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography} from "@material-ui/core";
 import {linkToEstablishment} from "../../API";
+import {Redirect} from "react-router-dom";
 
 export default class AlreadyRegisteredUser extends React.Component {
 	constructor(props) {
@@ -26,15 +27,18 @@ export default class AlreadyRegisteredUser extends React.Component {
 			linkToEstablishment(this.state.username, this.state.establishmentId)
 				.then(() => {
 					window.alert("Le serveur a bien été ajouté à l'établissement !");
+					this.setState({added: true});
 				})
 				.catch((error) => {
-					console.log(error);
 					this.setState({error: true, errorMessage: error.message});
 				});
 		} else this.setState({error: true, errorMessage: "Tous les champs doivent être remplis !"});
 	}
 
 	render() {
+		if (this.state.added === true)
+			return <Redirect to={"/"}/>;
+
 		let Error = undefined;
 
 		if (this.state.error !== undefined && this.state.error === true) {

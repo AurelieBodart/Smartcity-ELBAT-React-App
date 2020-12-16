@@ -97,22 +97,41 @@ const getDateReservations = async (establishmentId, date) => {
 }
 
 const setArrivalTime = async (personId, dateTimeReserved) => {
-	if (personId !== undefined && dateTimeReserved !== undefined)
+	if (!isNaN(personId) && dateTimeReserved !== undefined)
 		return api.setArrivalTime(personId, dateTimeReserved);
-	else throw new Error("Tous les champs doivent être remplis !");
+	else throw new Error("Tous les champs doivent être correctement remplis !");
 }
 
 const setExitTime = async (personId, dateTimeReserved) => {
-	if (personId !== undefined && dateTimeReserved !== undefined)
+	if (!isNaN(personId) && dateTimeReserved !== undefined)
 		return api.setExitTime(personId, dateTimeReserved);
-	else throw new Error("Tous les champs doivent être remplis !");
+	else throw new Error("Tous les champs doivent être correctement remplis !");
 }
 
 const cancelReservation = async (personId, dateTimeReserved) => {
-	if (personId !== undefined && dateTimeReserved !== undefined)
+	if (!isNaN(personId) && dateTimeReserved !== undefined)
 		return api.cancelReservation(personId, dateTimeReserved);
 	else throw new Error("Tous les champs doivent être remplis !");
 }
+
+const fetchTables = async (establishmentId, date) => {
+	if (!isNaN(establishmentId) && date)
+		return api.fetchTables(establishmentId, date);
+	else throw new Error("Il faut un identifiant d'établissement numérique !");
+}
+
+const updateUser = async (waiterId, username, lastName, firstName, gender, birthDate, phoneNumber, addressId, street, number, postalCode, city, country) => {
+	if (allDefined(username, lastName, firstName, gender, birthDate, phoneNumber, street, number, postalCode, city, country))
+		return api.updateUser(waiterId, username, lastName, firstName, gender, birthDate, phoneNumber, addressId, street, number, postalCode, city, country);
+	else throw new Error("Tous les champs doivent être correctement remplis !");
+}
+
+const makeReservation = async (phoneNumber, dateTimeReserved, nbCustomers, tableId, establishmentId, additionalInformation) => {
+	if (phoneNumber !== undefined && dateTimeReserved !== undefined && !isNaN(nbCustomers) && !isNaN(tableId) && !isNaN(establishmentId))
+		return api.makeReservation(phoneNumber, dateTimeReserved, nbCustomers, tableId, establishmentId, additionalInformation);
+	else throw new Error("Tous les champs doivent être correctement remplis !");
+}
+
 export {
 	login,
 	getEstablishment,
@@ -132,5 +151,8 @@ export {
 	getDateReservations,
 	setArrivalTime,
 	setExitTime,
-	cancelReservation
+	cancelReservation,
+	fetchTables,
+	updateUser,
+	makeReservation
 }

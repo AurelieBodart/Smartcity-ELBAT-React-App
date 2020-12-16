@@ -33,6 +33,7 @@ class EditEstablishment extends Component {
                 className="table-form"
                 variant="elevation"
                 elevation={2}
+                style={{margin: "100px auto"}}
             >
                 <Typography variant={"h4"} color={"primary"}>{this.state.establishment.name}</Typography>
                 <ButtonGroup orientation={"vertical"} style={{marginBottom: "20px"}}>

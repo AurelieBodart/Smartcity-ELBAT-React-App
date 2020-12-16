@@ -175,7 +175,7 @@ const addToEstablishment = async (establishmentId, username, email, password, na
 		lastName: name,
 		firstName,
 		gender,
-		birthDate,
+		birthDate: birthDate.toLocaleString().slice(0, 10),
 		phoneNumber,
 		email,
 		address: {
@@ -249,7 +249,6 @@ const updatePassword = async (username, previousPassword, newPassword) => {
 		else if (error.response.status === 500)
 			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
-	console.log(response)
 	return response.data;
 }
 
@@ -322,6 +321,90 @@ const cancelReservation = async (personId, dateTimeReserved) => {
 	return response.data;
 }
 
+const fetchTables = async (establishmentId, chosenDate) => {
+	const response = await axios.get(`${API_URL}/table/${establishmentId}/${chosenDate}`, { headers: header })
+		.catch((error) => {
+			if (error.response.status === 401)
+				throw new Error("Votre session est échue, veuillez vous reconnecter.");
+			else if (error.response.status === 400)
+				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 500)
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+		});
+
+	return response.data;
+}
+
+const updateUser = async (waiterId, username, firstName, lastName, gender, birthDate, phoneNumber, addressId, street, number, postalCode, city, country) => {
+	const response = await axios.patch(`${API_URL}/person`, {
+		id: waiterId,
+		username,
+		firstName,
+		lastName,
+		gender,
+		birthDate: new Date(Date.parse(birthDate)).getFullYear() + "-" + (new Date(Date.parse(birthDate)).getMonth() + 1) + "-" + new Date(Date.parse(birthDate)).getDate(),
+		phoneNumber,
+		address: {
+			id: addressId,
+			street,
+			number,
+			postalCode,
+			city,
+			country
+		}
+	}, {
+		headers: header
+	}).catch((error) => {
+		if (error.response.status === 401)
+			throw new Error("Votre session est échue, veuillez vous reconnecter.");
+		else if (error.response.status === 400)
+			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+		else if (error.response.status === 500)
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+	});
+
+	return response.data;
+}
+
+const makeReservation = async (phoneNumber, dateTimeReserved, nbCustomers, tableId, establishmentId, additionalInformation) => {
+	const { id } = await getUserViaPhoneNumber(phoneNumber);
+
+	const newReservationResponse = await axios.post(`${API_URL}/reservation`, {
+		idPerson: id,
+		dateTimeReserved,
+		nbCustomers,
+		idTable: tableId,
+		idEstablishment: establishmentId,
+		additionalInformation
+	}, { headers: header })
+		.catch((error) => {
+			if (error.response.status === 401)
+				throw new Error("Votre session est échue, veuillez vous reconnecter.");
+			else if (error.response.status === 400)
+				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 500)
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+		});
+
+	return newReservationResponse.data;
+}
+
+const getUserViaPhoneNumber = async (phoneNumber) => {
+	const response = await axios.get(`${API_URL}/person/one/phoneNumber/${phoneNumber}`, { headers: header })
+		.catch((error) => {
+			if (error.response.status === 401)
+				throw new Error("Votre session est échue, veuillez vous reconnecter.");
+			else if (error.response.status === 400)
+				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 404) {
+				throw new Error("Utilisateur inconnu");
+			}else if (error.response.status === 500)
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+		});
+
+	return response.data;
+}
+
 export {
 	login,
 	getEstablishment,
@@ -341,5 +424,8 @@ export {
 	getDateReservations,
 	setArrivalTime,
 	setExitTime,
-	cancelReservation
+	cancelReservation,
+	fetchTables,
+	updateUser,
+	makeReservation
 }
