@@ -31,7 +31,16 @@ const login = async (username, password) => {
 const getEstablishment = async (establishmentId) => {
 	const response = await axios.get(`${API_URL}/establishment/${establishmentId}`, {
 		headers: header
-	});
+	}).catch((error) => {
+			if (error.response.status === 401)
+				throw new Error("Votre session est échue, veuillez vous reconnecter.");
+			else if (error.response.status === 400)
+				throw new Error("Mauvaise requête. Réessayez.");
+			else if (error.response.status === 404)
+				throw new Error("L'établissement n'a pas été trouvé");
+			else if (error.response.status === 500)
+				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+		});
 	return response.data;
 }
 
@@ -59,7 +68,16 @@ const getEstablishments = async (...establishmentIds) => {
 const getAllEstablishments = async () => {
 	const response = await axios.get(API_URL + "/establishment/", {
 		headers: header
-	})
+	}).catch((error) => {
+		if (error.response.status === 401)
+			throw new Error("Votre session est échue, veuillez vous reconnecter.");
+		else if (error.response.status === 400)
+			throw new Error("Mauvaise requête. Réessayez.");
+		else if (error.response.status === 404)
+			throw new Error("Les établissements n'ont pas été trouvée");
+		else if (error.response.status === 500)
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+	});
 	return response.data;
 }
 
@@ -76,7 +94,16 @@ const addEstablishment = async (establishment) => {
 		city : establishment.city,
 		postalCode : establishment.postalCode
 
-	},{headers: header});
+	},{headers: header}).catch((error) => {
+		if (error.response.status === 401)
+			throw new Error("Votre session est échue, veuillez vous reconnecter.");
+		else if (error.response.status === 400)
+			throw new Error("Mauvaise requête. Réessayez.");
+		else if(error.response.status === 403)
+			throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+		else if (error.response.status === 500)
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+	});
 	return response.data;
 }
 
@@ -94,16 +121,43 @@ const updateEstablishment = async (establishment) => {
 		country : establishment.country,
 		city : establishment.city,
 		postalCode : establishment.postalCode
-	},{headers: header});
+	},{headers: header}
+	).catch((error) => {
+		if (error.response.status === 401)
+			throw new Error("Votre session est échue, veuillez vous reconnecter.");
+		else if (error.response.status === 400)
+			throw new Error("Mauvaise requête. Réessayez.");
+		else if(error.response.status === 403)
+			throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+		else if (error.response.status === 404)
+			throw new Error("L'établissement ou son adresse est inconnu et n'a pas pu être mis à jour");
+		else if (error.response.status === 500)
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+	});
+
 	return response.data;
 }
 
 const addTable = async (table, idEstablishment) => {
-	return await axios.post(`${API_URL}/table`, {
+	const response = await axios.post(`${API_URL}/table`, {
 		idEstablishment : idEstablishment,
 		nbSeats : table.nbSeats,
 		isOutside : table.isOutside
-	},{headers: header});
+	},{headers: header}
+	).catch((error) => {
+		if (error.response.status === 401)
+			throw new Error("Votre session est échue, veuillez vous reconnecter.");
+		else if (error.response.status === 400)
+			throw new Error("Mauvaise requête. Réessayez.");
+		else if(error.response.status === 403)
+			throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+		else if (error.response.status === 404)
+			throw new Error("L'établissement auquel vous voulez ajouter une table est inconnu");
+		else if (error.response.status === 500)
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
+	});
+
+	return response.data;
 }
 
 const deleteEstablishment = async (idEstablishment) => {
@@ -112,6 +166,17 @@ const deleteEstablishment = async (idEstablishment) => {
 		data : {
 			establishmentId : idEstablishment
 		}
+	}).catch((error) => {
+		if (error.response.status === 401)
+			throw new Error("Votre session est échue, veuillez vous reconnecter.");
+		else if (error.response.status === 400)
+			throw new Error("Mauvaise requête. Réessayez.");
+		else if(error.response.status === 403)
+			throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+		else if (error.response.status === 404)
+			throw new Error("L'établissement à supprimer n'a pas été trouvé");
+		else if (error.response.status === 500)
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
 
 	return response.data;
@@ -124,13 +189,34 @@ const deleteTable = async (idTable, idEstablishment) => {
 			idTable : idTable,
 			idEstablishment : idEstablishment
 		}
+	}).catch((error) => {
+		if (error.response.status === 401)
+			throw new Error("Votre session est échue, veuillez vous reconnecter.");
+		else if (error.response.status === 400)
+			throw new Error("Mauvaise requête. Réessayez.");
+		else if(error.response.status === 403)
+			throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+		else if (error.response.status === 404)
+			throw new Error("La table à supprimer n'a pas été trouvée");
+		else if (error.response.status === 500)
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
+
 	return response.data;
 }
 
 const getAllTables = async (idEstablishment) => {
 	const response = await axios.get(`${API_URL}/table/${idEstablishment}`, {
 		headers: header
+	}).catch((error) => {
+		if (error.response.status === 401)
+			throw new Error("Votre session est échue, veuillez vous reconnecter.");
+		else if (error.response.status === 400)
+			throw new Error("Mauvaise requête. Réessayez.");
+		else if (error.response.status === 404)
+			throw new Error("Les tables de l'établissement n'ont pas été trouvées");
+		else if (error.response.status === 500)
+			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
 	return response.data;
 }
