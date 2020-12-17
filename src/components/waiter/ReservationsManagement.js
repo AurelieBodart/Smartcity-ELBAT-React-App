@@ -26,7 +26,8 @@ class ReservationsManagement extends React.Component {
 	updateList() {
 		this.setState({reservations: []});
 
-		getReservationDetails(this.state.establishmentStore.id, this.state.date).then((reservations) => {
+		getReservationDetails(this.state.establishmentStore.id, this.state.date)
+			.then((reservations) => {
 			if (reservations !== undefined) {
 				this.setState({reservations: [...(reservations.sort((a, b) => {
 					const date1 = new Date(a.dateTimeReserved);
