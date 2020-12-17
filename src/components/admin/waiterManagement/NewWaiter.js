@@ -28,7 +28,7 @@ export default class NewWaiter extends React.Component {
 				passwordConfirmation: undefined,
 				lastName: undefined,
 				firstName: undefined,
-				gender: undefined,
+				gender: "F",
 				birthDate: undefined,
 				phoneNumber: undefined,
 				street: undefined,
@@ -76,7 +76,7 @@ export default class NewWaiter extends React.Component {
 			const password = this.state.user.password.trim();
 			const passwordConfirmation = this.state.user.passwordConfirmation.trim();
 			if (password === passwordConfirmation) {
-				const emailCheckRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				const emailCheckRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 				if (emailCheckRegex.test(this.state.user.email)) {
 					addToEstablishment(this.state.establishmentId, this.state.user.username, this.state.user.email, password, this.state.user.lastName, this.state.user.firstName, this.state.user.gender, this.state.user.birthDate, this.state.user.phoneNumber, this.state.user.street, this.state.user.number, this.state.user.postalCode, this.state.user.city, this.state.user.country)
@@ -85,7 +85,7 @@ export default class NewWaiter extends React.Component {
 							this.setState({added: true});
 						})
 						.catch((error) => {
-							this.setState({error: true, errorMessage: error});
+							this.setState({error: true, errorMessage: error.message});
 						});
 				} else this.setState({error: true, errorMessage: "Votre adresse mail n'est pas correcte !"});
 			} else this.setState({error: true, errorMessage: "Les deux mots de passe doivent être les mêmes !"});

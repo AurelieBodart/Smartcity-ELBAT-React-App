@@ -15,18 +15,18 @@ export default class WaiterManagement extends React.Component {
 		super(props);
 
 		this.state = {
-			username: props.user?.username,
-			email: props.user?.email,
-			name: props.user?.lastName,
-			firstName: props.user?.firstName,
-			gender: props.user?.gender,
-			birthDate: props.user?.birthDate,
-			phoneNumber: props.user?.phoneNumber,
-			street: props.user?.street,
-			number: props.user?.number,
-			postalCode: props.user?.postalCode,
-			city: props.user?.city,
-			country: props.user?.country,
+			username: props.user.username,
+			email: props.user.email,
+			name: props.user.lastName,
+			firstName: props.user.firstName,
+			gender: props.user.gender,
+			birthDate: props.user.birthDate,
+			phoneNumber: props.user.phoneNumber,
+			street: props.user.street,
+			number: props.user.number,
+			postalCode: props.user.postalCode,
+			city: props.user.city,
+			country: props.user.country,
 			callback: props.callback,
 			newUser: !!props.newUser
 		}
@@ -117,7 +117,7 @@ export default class WaiterManagement extends React.Component {
 				<FormControl>
 					<RadioGroup
 						row
-						value={this.state.gender !== undefined ? this.state.gender.toUpperCase() : "F"}
+						value={this.state.gender?.toUpperCase()}
 						onChange={(event) => this.state.callback({gender: event.target.value})}>
 						<FormControlLabel color={"primary"} value="F" control={<Radio />} label="Femme" />
 						<FormControlLabel color={"primary"} value="M" control={<Radio />} label="Homme" />
