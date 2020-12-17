@@ -61,7 +61,6 @@ class EmployeesList extends React.Component {
 	}
 
 	updateUserData() {
-		console.log(this.state)
 		if (allDefined(this.state.waiter.username, this.state.waiter.lastName, this.state.waiter.firstName, this.state.waiter.gender, this.state.waiter.birthDate, this.state.waiter.phoneNumber, this.state.waiter.street, this.state.waiter.number, this.state.waiter.postalCode, this.state.waiter.city, this.state.waiter.country)) {
 			updateUser(this.state.waiterId,
 				this.state.waiter.username,

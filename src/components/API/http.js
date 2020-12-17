@@ -55,6 +55,8 @@ const getEstablishments = async (...establishmentIds) => {
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
 				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 404)
+				throw new Error("L'établissement n'a pas été trouvé");
 			else if (error.response.status === 500)
 				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
@@ -233,6 +235,10 @@ const linkToEstablishment = async (username, establishmentId) => {
 			throw new Error("Votre session est échue, veuillez vous reconnecter.");
 		else if (error.response.status === 400)
 			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+		else if (error.response.status === 403)
+			throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+		else if(error.response.status === 404)
+			throw new Error("L'utilisateur ou l'établissement n'a pas été trouvé");
 		else if (error.response.status === 500)
 			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
@@ -247,6 +253,10 @@ const getUserViaUsername = async (username) => {
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
 				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 403)
+				throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+			else if(error.response.status === 404)
+				throw new Error("L'utilisateur n'a pas été trouvé");
 			else if (error.response.status === 500)
 				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
@@ -294,6 +304,10 @@ const getUsersByEstablishmentId = async (establishmentId) => {
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
 				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 403)
+				throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+			else if(error.response.status === 404)
+				throw new Error("Les serveurs n'ont pas été trouvés");
 			else if (error.response.status === 500)
 				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
@@ -313,6 +327,10 @@ const removeWaiterFromEstablishment = async (userId, establishmentId) => {
 			throw new Error("Votre session est échue, veuillez vous reconnecter.");
 		else if (error.response.status === 400)
 			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+		else if (error.response.status === 403)
+			throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+		else if(error.response.status === 404)
+			throw new Error("L'utilisateur ou son établissement n'a pas été trouvé");
 		else if (error.response.status === 500)
 			throw new Error("Erreur lors du traitement de votre demande.");
 	});
@@ -332,6 +350,8 @@ const updatePassword = async (username, previousPassword, newPassword) => {
 			throw new Error("Votre session est échue, veuillez vous reconnecter.");
 		else if (error.response.status === 400)
 			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+		else if(error.response.status === 404)
+			throw new Error("L'utilisateur n'a pas été trouvé");
 		else if (error.response.status === 500)
 			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
@@ -346,6 +366,8 @@ const getDateReservations = async (establishmentId, date) => {
 			throw new Error("Votre session est échue, veuillez vous reconnecter.");
 		else if (error.response.status === 400)
 			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+		else if (error.response.status === 403)
+			throw new Error("L'action demandée ne peut être réalisée que par un serveur");
 		else if (error.response.status === 500)
 			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
@@ -365,6 +387,10 @@ const setArrivalTime = async (personId, dateTimeReserved) => {
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
 				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 403)
+				throw new Error("L'action demandée ne peut être réalisée que par un serveur");
+			else if(error.response.status === 404)
+				throw new Error("La réservation n'a pas été trouvée");
 			else if (error.response.status === 500)
 				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
@@ -383,6 +409,10 @@ const setExitTime = async (personId, dateTimeReserved) => {
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
 				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 403)
+				throw new Error("L'action demandée ne peut être réalisée que par un serveur");
+			else if(error.response.status === 404)
+				throw new Error("La réservation n'a pas été trouvée");
 			else if (error.response.status === 500)
 				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
@@ -400,6 +430,10 @@ const cancelReservation = async (personId, dateTimeReserved) => {
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
 				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if (error.response.status === 403)
+				throw new Error("L'action demandée ne peut être réalisée que par un serveur");
+			else if(error.response.status === 404)
+				throw new Error("La réservation n'a pas été trouvée");
 			else if (error.response.status === 500)
 				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
@@ -414,6 +448,8 @@ const fetchTables = async (establishmentId, chosenDate) => {
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
 				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+			else if(error.response.status === 404)
+				throw new Error("La tables de l'établissement n'ont pas été trouvées");
 			else if (error.response.status === 500)
 				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
@@ -445,6 +481,10 @@ const updateUser = async (waiterId, username, firstName, lastName, gender, birth
 			throw new Error("Votre session est échue, veuillez vous reconnecter.");
 		else if (error.response.status === 400)
 			throw new Error("Les données fournies sont insuffisantes. Réessayez.");
+		else if (error.response.status === 403)
+			throw new Error("Seul l'administrateur peut modifier une autre personne que lui-même");
+		else if(error.response.status === 404)
+			throw new Error("L'utilisateur ou son adresse n'a pas été trouvé");
 		else if (error.response.status === 500)
 			throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 	});
@@ -482,9 +522,11 @@ const getUserViaPhoneNumber = async (phoneNumber) => {
 				throw new Error("Votre session est échue, veuillez vous reconnecter.");
 			else if (error.response.status === 400)
 				throw new Error("Les données fournies sont insuffisantes. Réessayez.");
-			else if (error.response.status === 404) {
-				throw new Error("Utilisateur inconnu");
-			}else if (error.response.status === 500)
+			else if (error.response.status === 403)
+				throw new Error("L'action demandée ne peut être réalisée que par un administrateur");
+			else if(error.response.status === 404)
+				throw new Error("L'utilisateur n'a pas été trouvé");
+			else if (error.response.status === 500)
 				throw new Error("Erreur lors du traitement de votre demande. Veuillez vous assurer que les informations entrées sont correctes.");
 		});
 

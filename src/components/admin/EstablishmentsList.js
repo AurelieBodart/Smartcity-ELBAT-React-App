@@ -13,8 +13,6 @@ class EstablishmentsList extends Component {
         }
     }
 
-    // TODO je ne sais pas pourquoi mais il faut didMount et didUpdate sinon la liste ne s'actualise pas ...
-
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(this.state.loadEstablishment){
             getAllEstablishments()
