@@ -17,42 +17,30 @@ export default class ReservationDetails extends React.Component {
 	}
 
 	handleSetArrival() {
-		try {
-			setArrivalTime(this.state.reservation.personId, this.state.reservation.dateTimeReserved)
-				.then(() => {
-					this.props.callback();
-				}).catch((error) => {
-					window.alert(error);
-			});
-		} catch (e) {
-			window.alert(e);
-		}
+		setArrivalTime(this.state.reservation.personId, this.state.reservation.dateTimeReserved)
+			.then(() => {
+				this.props.callback();
+			}).catch((error) => {
+				window.alert(error);
+		});
 	}
 
 	handleClientsLeft() {
-		try {
-			setExitTime(this.state.reservation.personId, this.state.reservation.dateTimeReserved)
-				.then(() => {
-					this.props.callback();
-				}).catch((error) => {
-					window.alert(error);
-				});
-		} catch (e) {
-			window.alert(e);
-		}
+		setExitTime(this.state.reservation.personId, this.state.reservation.dateTimeReserved)
+			.then(() => {
+				this.props.callback();
+			}).catch((error) => {
+				window.alert(error);
+			});
 	}
 
 	cancelReservation() {
-		try {
-			cancelReservation(this.state.reservation.personId, this.state.reservation.dateTimeReserved)
-				.then(() => {
-					this.props.callback();
-				}).catch((error) => {
+		cancelReservation(this.state.reservation.personId, this.state.reservation.dateTimeReserved)
+			.then(() => {
+				this.props.callback();
+			}).catch((error) => {
 				window.alert(error);
-			});
-		} catch (e) {
-			window.alert(e);
-		}
+		});
 	}
 
 	render() {
