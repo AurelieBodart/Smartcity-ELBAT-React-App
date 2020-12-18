@@ -44,9 +44,7 @@ export default class AddEstablishment extends React.Component {
                     await postTable(table, idEstablishment);
             }
         } catch (e) {
-            console.log(e.message);
             this.setState({error: true, errorMessage: e.message});
-
         }
     }
 

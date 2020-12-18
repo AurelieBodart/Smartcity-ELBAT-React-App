@@ -99,7 +99,7 @@ export default class NewWaiter extends React.Component {
 		let Error = undefined;
 
 		if (this.state.error === true) {
-			Error = <Typography color={"error"}>Erreur ! {this.state.errorMessage.message}</Typography>
+			Error = <Typography color={"error"}>Erreur ! {this.state.errorMessage}</Typography>
 		}
 
 		return (

@@ -52,7 +52,7 @@ class LoginForm extends React.Component {
 				error: true,
 				loading: false,
 				loaded: true,
-				errorMessage: e.message
+				errorMessage: e
 			});
 		}
 	}

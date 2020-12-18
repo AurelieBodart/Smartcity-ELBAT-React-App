@@ -35,25 +35,32 @@ class NewReservation extends React.Component {
 	}
 
 	handleReservationConfirmation() {
-		this.setState({error: undefined, errorMessage: undefined}, () => {
-			if (this.state.phoneNumber !== undefined) {
-				if (this.state.dateTime > new Date()) {
-					makeReservation(this.state.phoneNumber,
-						this.state.dateTime,
-						this.state.clientsNbr,
-						this.state.tables.find((table) => table.nbSeats >= this.state.clientsNbr && table.isOutside === this.state.isOutside).id,
-						this.props.establishmentStore.id,
-						this.state.additionalInformation)
-						.then(() => {
-							window.alert("La réservation a bien été ajoutée !");
-							this.setState({added: true})
-						})
-						.catch((error) => {
-							this.setState({error: true, errorMessage: error.message});
-						});
-				} else this.setState({error: true, errorMessage: "La date et l'heure ne peuvent pas être antérieures à maintenant."})
-			} else this.setState({error: true, errorMessage: "Tous les champs doivent être remplis !"})
-		});
+		let tableReserved = this.state.tables.find((table) => table.nbSeats >= this.state.clientsNbr && table.isOutside === this.state.isOutside);
+
+		if(tableReserved !== undefined) {
+			this.setState({error: undefined, errorMessage: undefined}, () => {
+				if (this.state.phoneNumber !== undefined) {
+					if (this.state.dateTime > new Date()) {
+						makeReservation(this.state.phoneNumber,
+							this.state.dateTime,
+							this.state.clientsNbr,
+							tableReserved.id,
+							this.props.establishmentStore.id,
+							this.state.additionalInformation)
+							.then(() => {
+								window.alert("La réservation a bien été ajoutée !");
+								this.setState({added: true})
+							})
+							.catch((error) => {
+								this.setState({error: true, errorMessage: error.message});
+							});
+					} else
+						this.setState({error: true, errorMessage: "La date et l'heure ne peuvent pas être antérieures à maintenant."})
+				} else
+					this.setState({error: true, errorMessage: "Tous les champs doivent être remplis !"})
+			});
+		} else
+			this.setState({error: true, errorMessage: "Il n'y a plus de table disponible dans cet établissement à la date choisie."})
 	}
 
 	handleFormCompletion(date) {

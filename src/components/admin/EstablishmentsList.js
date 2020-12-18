@@ -21,9 +21,7 @@ class EstablishmentsList extends Component {
                         this.setState({establishments : result});
                 })
                 .catch(e => {
-                    console.log(e.message);
                     this.setState({error: true, errorMessage: e.message});
-
                 });
 
             this.setState({loadEstablishment : false})
@@ -36,7 +34,6 @@ class EstablishmentsList extends Component {
                 this.setState({establishments : result});
             })
             .catch(e => {
-                console.log(e.message);
                 this.setState({error: true, errorMessage: e.message});
             });
     }
