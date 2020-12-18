@@ -22,7 +22,6 @@ class UpdateEstablishment extends React.Component {
         getAllTables(this.props.establishmentStore.id)
             .then(response => this.setState({tablesBeforeUpdate : response}))
             .catch(e => {
-                console.log(e.message);
                 this.setState({error: true, errorMessage: e.message});
             });
     }
@@ -67,7 +66,6 @@ class UpdateEstablishment extends React.Component {
                     await postTable(table, this.state.establishment.id);
 
             } catch (e) {
-                console.log(e.message);
                 this.setState({error: true, errorMessage: e.message});
             }
         }
