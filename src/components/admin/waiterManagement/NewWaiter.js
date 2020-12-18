@@ -85,7 +85,7 @@ export default class NewWaiter extends React.Component {
 							this.setState({added: true});
 						})
 						.catch((error) => {
-							this.setState({error: true, errorMessage: error});
+							this.setState({error: true, errorMessage: error.message});
 						});
 				} else this.setState({error: true, errorMessage: "Votre adresse mail n'est pas correcte !"});
 			} else this.setState({error: true, errorMessage: "Les deux mots de passe doivent être les mêmes !"});
@@ -99,7 +99,7 @@ export default class NewWaiter extends React.Component {
 		let Error = undefined;
 
 		if (this.state.error === true) {
-			Error = <Typography color={"error"}>Erreur ! {this.state.errorMessage.message}</Typography>
+			Error = <Typography color={"error"}>Erreur ! {this.state.errorMessage}</Typography>
 		}
 
 		return (
